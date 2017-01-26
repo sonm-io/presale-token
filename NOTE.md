@@ -7,7 +7,7 @@
 Also @SCBuergel does not write test properly, so his version does not include into the
 npm package, and also, above it, npm version of library is out of date even from official master branch.
 
-Well, at least we found this bug with 'throw' and I copied right version of contract themselves.
+  Well, at least we found this bug with 'throw' and I copied right version of contract themselves.
 
 3. Deployed crowdsale contract from OpenZeppelin, it's seems works.. truffle console stil make me angry because it's not support default accounts and have strange behaviour, but simple functions looked like works
 
