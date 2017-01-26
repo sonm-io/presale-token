@@ -15,6 +15,15 @@ npm package, and also, above it, npm version of library is out of date even from
 
 5. It is absolute hell with packages and dependencys no test is working.. probably will try install truffle BETA?
 
+6. There are pifall with dependencys npm. Clone this repo and
+``` npm install ```
+do not use any other npm packages from any resources
+
+7. There is still need to fix tests, cause of vulnurability fix (see line 6 issue)
+I hate zeppeline now for their awful work with versions, packages and dependencys, but still it is better than write acyncrhonos truffle native tests.
+
+Will work on contracts now, someone will be needed to rewrite tests. 
+
 **TODO**:
 
 -- clean second issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.
