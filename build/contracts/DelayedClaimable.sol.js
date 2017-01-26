@@ -231,13 +231,13 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
-      throw new Error("MetaCoin error: Please call setProvider() first before calling new().");
+      throw new Error("DelayedClaimable error: Please call setProvider() first before calling new().");
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
-      throw new Error("MetaCoin error: contract binary not set. Can't deploy new instance.");
+      throw new Error("DelayedClaimable error: contract binary not set. Can't deploy new instance.");
     }
 
     var regex = /__[^_]+_+/g;
@@ -256,7 +256,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
-      throw new Error("MetaCoin contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of MetaCoin: " + unlinked_libraries);
+      throw new Error("DelayedClaimable contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of DelayedClaimable: " + unlinked_libraries);
     }
 
     var self = this;
@@ -297,7 +297,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
-      throw new Error("Invalid address passed to MetaCoin.at(): " + address);
+      throw new Error("Invalid address passed to DelayedClaimable.at(): " + address);
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -308,7 +308,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
-      throw new Error("Cannot find deployed address: MetaCoin not deployed or address not set.");
+      throw new Error("Cannot find deployed address: DelayedClaimable not deployed or address not set.");
     }
 
     return this.at(this.address);
@@ -351,120 +351,99 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     "abi": [
       {
         "constant": false,
-        "inputs": [
-          {
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "name": "getBalanceInEth",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "receiver",
-            "type": "address"
-          },
-          {
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "sendCoin",
-        "outputs": [
-          {
-            "name": "sufficient",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "name": "getBalance",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
         "inputs": [],
+        "name": "claimOwnership",
+        "outputs": [],
         "payable": false,
-        "type": "constructor"
+        "type": "function"
       },
       {
-        "anonymous": false,
-        "inputs": [
+        "constant": true,
+        "inputs": [],
+        "name": "claimAfterBlock",
+        "outputs": [
           {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
+            "name": "",
             "type": "uint256"
           }
         ],
-        "name": "Transfer",
-        "type": "event"
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "claimBeforeBlock",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "pendingOwner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_claimBeforeBlock",
+            "type": "uint256"
+          },
+          {
+            "name": "_claimAfterBlock",
+            "type": "uint256"
+          }
+        ],
+        "name": "setClaimBlocks",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
       }
     ],
-    "unlinked_binary": "0x606060405234610000575b600160a060020a033216600090815260208190526040902061271090555b5b610223806100386000396000f300606060405263ffffffff60e060020a6000350416637bd703e8811461003a57806390b98a1114610065578063f8b2cb4f14610095575b610000565b3461000057610053600160a060020a03600435166100c0565b60408051918252519081900360200190f35b3461000057610081600160a060020a0360043516602435610140565b604080519115158252519081900360200190f35b3461000057610053600160a060020a03600435166101d8565b60408051918252519081900360200190f35b600073__ConvertLib____________________________6396e4ee3d6100e5846101d8565b60026000604051602001526040518363ffffffff1660e060020a028152600401808381526020018281526020019250505060206040518083038186803b156100005760325a03f415610000575050604051519150505b919050565b600160a060020a03331660009081526020819052604081205482901015610169575060006101d2565b600160a060020a0333811660008181526020818152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b92915050565b600160a060020a0381166000908152602081905260409020545b9190505600a165627a7a7230582088c9abf42f2d74d5df0919f22eb5bd610821170f23775224596dd5f9dff59f4f0029",
-    "events": {
-      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
-      }
-    },
-    "updated_at": 1485442370429,
-    "links": {
-      "ConvertLib": "0xd073b604507765f30790369f013400a5ab10ed6e"
-    },
-    "address": "0x1050b0ed2cadac4b52aaa9cb4d45f11b7325e760"
+    "unlinked_binary": "0x60606040525b60008054600160a060020a03191633600160a060020a03161790555b5b610296806100316000396000f300606060405236156100675763ffffffff60e060020a6000350416634e71e0c8811461006c5780638c6b20ab1461007b5780638da5cb5b1461009a57806391cd5efa146100c3578063e30c3978146100e2578063ec620eb31461010b578063f2fde38b14610120575b610000565b346100005761007961013b565b005b34610000576100886101b2565b60408051918252519081900360200190f35b34610000576100a76101b8565b60408051600160a060020a039092168252519081900360200190f35b34610000576100886101c7565b60408051918252519081900360200190f35b34610000576100a76101cd565b60408051600160a060020a039092168252519081900360200190f35b34610000576100796004356024356101dc565b005b3461000057610079600160a060020a036004351661021c565b005b60015433600160a060020a039081169116141561006757600254431180610163575060035443105b1561016d57610000565b600180546000805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a0384161782559091169091556002555b6101af565b610000565b5b565b60035481565b600054600160a060020a031681565b60025481565b600154600160a060020a031681565b60005433600160a060020a03908116911614156100675760025481111561020257610000565b600282905560038190555b610217565b610000565b5b5050565b60005433600160a060020a0390811691161415610067576001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b610266565b610000565b5b505600a165627a7a7230582073e11fe63f4cf0ae2848fbb21aaa866f3f3b27933b4cee3da289e71fd752d3c00029",
+    "events": {},
+    "updated_at": 1485442370399,
+    "links": {}
   }
 };
 
@@ -549,7 +528,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
-  Contract.contract_name   = Contract.prototype.contract_name   = "MetaCoin";
+  Contract.contract_name   = Contract.prototype.contract_name   = "DelayedClaimable";
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -589,6 +568,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
-    window.MetaCoin = Contract;
+    window.DelayedClaimable = Contract;
   }
 })();

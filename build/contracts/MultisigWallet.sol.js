@@ -231,13 +231,13 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
-      throw new Error("MetaCoin error: Please call setProvider() first before calling new().");
+      throw new Error("MultisigWallet error: Please call setProvider() first before calling new().");
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
-      throw new Error("MetaCoin error: contract binary not set. Can't deploy new instance.");
+      throw new Error("MultisigWallet error: contract binary not set. Can't deploy new instance.");
     }
 
     var regex = /__[^_]+_+/g;
@@ -256,7 +256,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
-      throw new Error("MetaCoin contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of MetaCoin: " + unlinked_libraries);
+      throw new Error("MultisigWallet contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of MultisigWallet: " + unlinked_libraries);
     }
 
     var self = this;
@@ -297,7 +297,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
-      throw new Error("Invalid address passed to MetaCoin.at(): " + address);
+      throw new Error("Invalid address passed to MultisigWallet.at(): " + address);
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -308,7 +308,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
-      throw new Error("Cannot find deployed address: MetaCoin not deployed or address not set.");
+      throw new Error("Cannot find deployed address: MultisigWallet not deployed or address not set.");
     }
 
     return this.at(this.address);
@@ -350,14 +350,48 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   "default": {
     "abi": [
       {
-        "constant": false,
+        "constant": true,
         "inputs": [
           {
-            "name": "addr",
+            "name": "_addr",
             "type": "address"
           }
         ],
-        "name": "getBalanceInEth",
+        "name": "isOwner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "resetSpentToday",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "dailyLimit",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "lastDay",
         "outputs": [
           {
             "name": "",
@@ -371,18 +405,14 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "constant": false,
         "inputs": [
           {
-            "name": "receiver",
-            "type": "address"
-          },
-          {
-            "name": "amount",
-            "type": "uint256"
+            "name": "_h",
+            "type": "bytes32"
           }
         ],
-        "name": "sendCoin",
+        "name": "confirm",
         "outputs": [
           {
-            "name": "sufficient",
+            "name": "",
             "type": "bool"
           }
         ],
@@ -393,11 +423,111 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "constant": false,
         "inputs": [
           {
-            "name": "addr",
+            "name": "_newLimit",
+            "type": "uint256"
+          }
+        ],
+        "name": "setDailyLimit",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          },
+          {
+            "name": "_data",
+            "type": "bytes"
+          }
+        ],
+        "name": "execute",
+        "outputs": [
+          {
+            "name": "_r",
+            "type": "bytes32"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_operation",
+            "type": "bytes32"
+          }
+        ],
+        "name": "revoke",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_operation",
+            "type": "bytes32"
+          },
+          {
+            "name": "_owner",
             "type": "address"
           }
         ],
-        "name": "getBalance",
+        "name": "hasConfirmed",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "ownerIndex",
+            "type": "uint256"
+          }
+        ],
+        "name": "getOwner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_to",
+            "type": "address"
+          }
+        ],
+        "name": "kill",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "required",
         "outputs": [
           {
             "name": "",
@@ -408,63 +538,346 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "type": "function"
       },
       {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_from",
+            "type": "address"
+          },
+          {
+            "name": "_to",
+            "type": "address"
+          }
+        ],
+        "name": "changeOwner",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
         "inputs": [],
+        "name": "spentToday",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "name": "_owners",
+            "type": "address[]"
+          },
+          {
+            "name": "_required",
+            "type": "uint256"
+          },
+          {
+            "name": "_daylimit",
+            "type": "uint256"
+          }
+        ],
         "payable": false,
         "type": "constructor"
+      },
+      {
+        "payable": true,
+        "type": "fallback"
       },
       {
         "anonymous": false,
         "inputs": [
           {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
+            "indexed": false,
+            "name": "owner",
             "type": "address"
           },
           {
             "indexed": false,
-            "name": "_value",
-            "type": "uint256"
+            "name": "operation",
+            "type": "bytes32"
           }
         ],
-        "name": "Transfer",
+        "name": "Confirmation",
         "type": "event"
-      }
-    ],
-    "unlinked_binary": "0x606060405234610000575b600160a060020a033216600090815260208190526040902061271090555b5b610223806100386000396000f300606060405263ffffffff60e060020a6000350416637bd703e8811461003a57806390b98a1114610065578063f8b2cb4f14610095575b610000565b3461000057610053600160a060020a03600435166100c0565b60408051918252519081900360200190f35b3461000057610081600160a060020a0360043516602435610140565b604080519115158252519081900360200190f35b3461000057610053600160a060020a03600435166101d8565b60408051918252519081900360200190f35b600073__ConvertLib____________________________6396e4ee3d6100e5846101d8565b60026000604051602001526040518363ffffffff1660e060020a028152600401808381526020018281526020019250505060206040518083038186803b156100005760325a03f415610000575050604051519150505b919050565b600160a060020a03331660009081526020819052604081205482901015610169575060006101d2565b600160a060020a0333811660008181526020818152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b92915050565b600160a060020a0381166000908152602081905260409020545b9190505600a165627a7a7230582088c9abf42f2d74d5df0919f22eb5bd610821170f23775224596dd5f9dff59f4f0029",
-    "events": {
-      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
+      },
+      {
         "anonymous": false,
         "inputs": [
           {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
+            "indexed": false,
+            "name": "owner",
             "type": "address"
           },
           {
             "indexed": false,
-            "name": "_value",
+            "name": "operation",
+            "type": "bytes32"
+          }
+        ],
+        "name": "Revoke",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "_from",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
             "type": "uint256"
           }
         ],
-        "name": "Transfer",
+        "name": "Deposit",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "SingleTransact",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "operation",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "MultiTransact",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "operation",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "initiator",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "ConfirmationNeeded",
+        "type": "event"
+      }
+    ],
+    "events": {
+      "0xe1c52dc63b719ade82e8bea94cc41a0d5d28e4aaf536adb5e9cccc9ff8c1aeda": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "operation",
+            "type": "bytes32"
+          }
+        ],
+        "name": "Confirmation",
+        "type": "event"
+      },
+      "0xc7fb647e59b18047309aa15aad418e5d7ca96d173ad704f1031a2c3d7591734b": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "operation",
+            "type": "bytes32"
+          }
+        ],
+        "name": "Revoke",
+        "type": "event"
+      },
+      "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "_from",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "Deposit",
+        "type": "event"
+      },
+      "0x92ca3a80853e6663fa31fa10b99225f18d4902939b4c53a9caae9043f6efd004": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "SingleTransact",
+        "type": "event"
+      },
+      "0xe7c957c06e9a662c1a6c77366179f5b702b97651dc28eee7d5bf1dff6e40bb4a": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "operation",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "MultiTransact",
+        "type": "event"
+      },
+      "0x1733cbb53659d713b79580f79f3f9ff215f78a7c7aa45890f3b89fc5cddfbf32": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "operation",
+            "type": "bytes32"
+          },
+          {
+            "indexed": false,
+            "name": "initiator",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "ConfirmationNeeded",
         "type": "event"
       }
     },
-    "updated_at": 1485442370429,
-    "links": {
-      "ConvertLib": "0xd073b604507765f30790369f013400a5ab10ed6e"
-    },
-    "address": "0x1050b0ed2cadac4b52aaa9cb4d45f11b7325e760"
+    "updated_at": 1485442370444,
+    "links": {}
   }
 };
 
@@ -549,7 +962,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
-  Contract.contract_name   = Contract.prototype.contract_name   = "MetaCoin";
+  Contract.contract_name   = Contract.prototype.contract_name   = "MultisigWallet";
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -589,6 +1002,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
-    window.MetaCoin = Contract;
+    window.MultisigWallet = Contract;
   }
 })();

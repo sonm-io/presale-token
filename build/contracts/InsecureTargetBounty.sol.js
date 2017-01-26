@@ -231,13 +231,13 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
-      throw new Error("MetaCoin error: Please call setProvider() first before calling new().");
+      throw new Error("InsecureTargetBounty error: Please call setProvider() first before calling new().");
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
-      throw new Error("MetaCoin error: contract binary not set. Can't deploy new instance.");
+      throw new Error("InsecureTargetBounty error: contract binary not set. Can't deploy new instance.");
     }
 
     var regex = /__[^_]+_+/g;
@@ -256,7 +256,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
-      throw new Error("MetaCoin contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of MetaCoin: " + unlinked_libraries);
+      throw new Error("InsecureTargetBounty contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of InsecureTargetBounty: " + unlinked_libraries);
     }
 
     var self = this;
@@ -297,7 +297,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
-      throw new Error("Invalid address passed to MetaCoin.at(): " + address);
+      throw new Error("Invalid address passed to InsecureTargetBounty.at(): " + address);
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -308,7 +308,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
-      throw new Error("Cannot find deployed address: MetaCoin not deployed or address not set.");
+      throw new Error("Cannot find deployed address: InsecureTargetBounty not deployed or address not set.");
     }
 
     return this.at(this.address);
@@ -350,14 +350,87 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   "default": {
     "abi": [
       {
-        "constant": false,
+        "constant": true,
         "inputs": [
           {
-            "name": "addr",
+            "name": "",
             "type": "address"
           }
         ],
-        "name": "getBalanceInEth",
+        "name": "researchers",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "target",
+            "type": "address"
+          }
+        ],
+        "name": "claim",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "kill",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "withdrawPayments",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "createTarget",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "payments",
         "outputs": [
           {
             "name": "",
@@ -369,20 +442,24 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       },
       {
         "constant": false,
-        "inputs": [
-          {
-            "name": "receiver",
-            "type": "address"
-          },
-          {
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "sendCoin",
+        "inputs": [],
+        "name": "checkInvariant",
         "outputs": [
           {
-            "name": "sufficient",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "claimed",
+        "outputs": [
+          {
+            "name": "",
             "type": "bool"
           }
         ],
@@ -393,78 +470,49 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "constant": false,
         "inputs": [
           {
-            "name": "addr",
+            "name": "newOwner",
             "type": "address"
           }
         ],
-        "name": "getBalance",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
+        "name": "transferOwnership",
+        "outputs": [],
         "payable": false,
         "type": "function"
       },
       {
-        "inputs": [],
-        "payable": false,
-        "type": "constructor"
+        "payable": true,
+        "type": "fallback"
       },
       {
         "anonymous": false,
         "inputs": [
           {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
             "indexed": false,
-            "name": "_value",
-            "type": "uint256"
+            "name": "createdAddress",
+            "type": "address"
           }
         ],
-        "name": "Transfer",
+        "name": "TargetCreated",
         "type": "event"
       }
     ],
-    "unlinked_binary": "0x606060405234610000575b600160a060020a033216600090815260208190526040902061271090555b5b610223806100386000396000f300606060405263ffffffff60e060020a6000350416637bd703e8811461003a57806390b98a1114610065578063f8b2cb4f14610095575b610000565b3461000057610053600160a060020a03600435166100c0565b60408051918252519081900360200190f35b3461000057610081600160a060020a0360043516602435610140565b604080519115158252519081900360200190f35b3461000057610053600160a060020a03600435166101d8565b60408051918252519081900360200190f35b600073__ConvertLib____________________________6396e4ee3d6100e5846101d8565b60026000604051602001526040518363ffffffff1660e060020a028152600401808381526020018281526020019250505060206040518083038186803b156100005760325a03f415610000575050604051519150505b919050565b600160a060020a03331660009081526020819052604081205482901015610169575060006101d2565b600160a060020a0333811660008181526020818152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b92915050565b600160a060020a0381166000908152602081905260409020545b9190505600a165627a7a7230582088c9abf42f2d74d5df0919f22eb5bd610821170f23775224596dd5f9dff59f4f0029",
+    "unlinked_binary": "0x60606040525b60018054600160a060020a03191633600160a060020a03161790555b5b61061e806100316000396000f300606060405236156100885763ffffffff60e060020a60003504166301bc237d81146100a85780631e83409a146100dd57806341c0e1b5146100f85780636103d70b146101075780638da5cb5b14610116578063c98165b61461013f578063e2982c2114610168578063e79487da14610193578063e834a834146101b4578063f2fde38b146101d5575b6100a65b60025460a060020a900460ff16156100a357610000565b5b565b005b34610000576100c1600160a060020a03600435166101f0565b60408051600160a060020a039092168252519081900360200190f35b34610000576100a6600160a060020a036004351661020b565b005b34610000576100a66102ce565b005b34610000576100a6610300565b005b34610000576100c1610380565b60408051600160a060020a039092168252519081900360200190f35b34610000576100c161038f565b60408051600160a060020a039092168252519081900360200190f35b3461000057610181600160a060020a036004351661042a565b60408051918252519081900360200190f35b34610000576101a061043c565b604080519115158252519081900360200190f35b34610000576101a06104b3565b604080519115158252519081900360200190f35b34610000576100a6600160a060020a03600435166104c3565b005b600360205260009081526040902054600160a060020a031681565b600160a060020a038082166000908152600360205260409020541680151561023257610000565b81600160a060020a031663e79487da6000604051602001526040518163ffffffff1660e060020a028152600401809050602060405180830381600087803b156100005760325a03f1156100005750506040515115905061029157610000565b6102a58130600160a060020a031631610521565b6002805474ff0000000000000000000000000000000000000000191660a060020a1790555b5050565b60015433600160a060020a03908116911614156102f857600154600160a060020a0316ff5b6100a3565b610000565b5b565b33600160a060020a03811660009081526020819052604090205480151561032657610000565b8030600160a060020a031631101561033d57610000565b600160a060020a0382166000818152602081905260408082208290555183156108fc0291849190818181858888f1935050505015156102ca57610000565b5b5050565b600154600160a060020a031681565b6000610399610544565b6002805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a03938416178083558316600090815260036020908152604091829020805490931633861617909255915482519316835290517fe62d909feaad4aecbcea8fef32a9b41552373e45f5acb7ce7fc0a997180e7ae59281900390910190a150600254600160a060020a03165b90565b60006020819052908152604090205481565b600254604080516000602091820181905282517fe79487da00000000000000000000000000000000000000000000000000000000815292519093600160a060020a03169263e79487da92600480830193919282900301818787803b156100005760325a03f115610000575050604051519150505b90565b60025460a060020a900460ff1681565b60015433600160a060020a03908116911614156102f857600160a060020a03811615610512576001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b61051d565b610000565b5b50565b600160a060020a03821660009081526020819052604090208054820190555b5050565b600060405160898061056a83396040519101819003906000f080156100005790505b9056006060604052346000575b6072806100176000396000f300606060405263ffffffff60e060020a600035041663e79487da81146022575b6000565b34600057602c6040565b604080519115158252519081900360200190f35b60005b905600a165627a7a72305820a2c95f37fdaf9a1e081b6bf688968a7bb211c8687d3528fd0923cbcb6effdf170029a165627a7a72305820219d2c77f96c2b9d81189b28293ecfb40ad798446ba2c86f9630c5b93ec2845b0029",
     "events": {
-      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
+      "0xe62d909feaad4aecbcea8fef32a9b41552373e45f5acb7ce7fc0a997180e7ae5": {
         "anonymous": false,
         "inputs": [
           {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
             "indexed": false,
-            "name": "_value",
-            "type": "uint256"
+            "name": "createdAddress",
+            "type": "address"
           }
         ],
-        "name": "Transfer",
+        "name": "TargetCreated",
         "type": "event"
       }
     },
-    "updated_at": 1485442370429,
-    "links": {
-      "ConvertLib": "0xd073b604507765f30790369f013400a5ab10ed6e"
-    },
-    "address": "0x1050b0ed2cadac4b52aaa9cb4d45f11b7325e760"
+    "updated_at": 1485442370418,
+    "links": {}
   }
 };
 
@@ -549,7 +597,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
-  Contract.contract_name   = Contract.prototype.contract_name   = "MetaCoin";
+  Contract.contract_name   = Contract.prototype.contract_name   = "InsecureTargetBounty";
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -589,6 +637,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
-    window.MetaCoin = Contract;
+    window.InsecureTargetBounty = Contract;
   }
 })();

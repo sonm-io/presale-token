@@ -231,13 +231,13 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
-      throw new Error("MetaCoin error: Please call setProvider() first before calling new().");
+      throw new Error("StoppableMock error: Please call setProvider() first before calling new().");
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
-      throw new Error("MetaCoin error: contract binary not set. Can't deploy new instance.");
+      throw new Error("StoppableMock error: contract binary not set. Can't deploy new instance.");
     }
 
     var regex = /__[^_]+_+/g;
@@ -256,7 +256,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
-      throw new Error("MetaCoin contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of MetaCoin: " + unlinked_libraries);
+      throw new Error("StoppableMock contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of StoppableMock: " + unlinked_libraries);
     }
 
     var self = this;
@@ -297,7 +297,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
-      throw new Error("Invalid address passed to MetaCoin.at(): " + address);
+      throw new Error("Invalid address passed to StoppableMock.at(): " + address);
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -308,7 +308,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
-      throw new Error("Cannot find deployed address: MetaCoin not deployed or address not set.");
+      throw new Error("Cannot find deployed address: StoppableMock not deployed or address not set.");
     }
 
     return this.at(this.address);
@@ -350,14 +350,9 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   "default": {
     "abi": [
       {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "name": "getBalanceInEth",
+        "constant": true,
+        "inputs": [],
+        "name": "count",
         "outputs": [
           {
             "name": "",
@@ -369,20 +364,32 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       },
       {
         "constant": false,
-        "inputs": [
-          {
-            "name": "receiver",
-            "type": "address"
-          },
-          {
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "sendCoin",
+        "inputs": [],
+        "name": "emergencyStop",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "stopped",
         "outputs": [
           {
-            "name": "sufficient",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "drasticMeasureTaken",
+        "outputs": [
+          {
+            "name": "",
             "type": "bool"
           }
         ],
@@ -391,19 +398,51 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       },
       {
         "constant": false,
-        "inputs": [
-          {
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "name": "getBalance",
+        "inputs": [],
+        "name": "release",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
         "outputs": [
           {
             "name": "",
-            "type": "uint256"
+            "type": "address"
           }
         ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "drasticMeasure",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "normalProcess",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
         "payable": false,
         "type": "function"
       },
@@ -411,60 +450,12 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "inputs": [],
         "payable": false,
         "type": "constructor"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
       }
     ],
-    "unlinked_binary": "0x606060405234610000575b600160a060020a033216600090815260208190526040902061271090555b5b610223806100386000396000f300606060405263ffffffff60e060020a6000350416637bd703e8811461003a57806390b98a1114610065578063f8b2cb4f14610095575b610000565b3461000057610053600160a060020a03600435166100c0565b60408051918252519081900360200190f35b3461000057610081600160a060020a0360043516602435610140565b604080519115158252519081900360200190f35b3461000057610053600160a060020a03600435166101d8565b60408051918252519081900360200190f35b600073__ConvertLib____________________________6396e4ee3d6100e5846101d8565b60026000604051602001526040518363ffffffff1660e060020a028152600401808381526020018281526020019250505060206040518083038186803b156100005760325a03f415610000575050604051519150505b919050565b600160a060020a03331660009081526020819052604081205482901015610169575060006101d2565b600160a060020a0333811660008181526020818152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b92915050565b600160a060020a0381166000908152602081905260409020545b9190505600a165627a7a7230582088c9abf42f2d74d5df0919f22eb5bd610821170f23775224596dd5f9dff59f4f0029",
-    "events": {
-      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
-      }
-    },
-    "updated_at": 1485442370429,
-    "links": {
-      "ConvertLib": "0xd073b604507765f30790369f013400a5ab10ed6e"
-    },
-    "address": "0x1050b0ed2cadac4b52aaa9cb4d45f11b7325e760"
+    "unlinked_binary": "0x606060405234610000575b5b60008054600160a060020a03191633600160a060020a03161790555b6000805460a860020a60ff02191681556001555b5b61031e8061004b6000396000f3006060604052361561007d5763ffffffff60e060020a60003504166306661abd811461008257806363a599a4146100a157806375f12b21146100b057806376657b8e146100d157806386d1a69f146100f25780638da5cb5b146101015780639958f0451461012a578063e7651d7a14610139578063f2fde38b14610148575b610000565b346100005761008f610163565b60408051918252519081900360200190f35b34610000576100ae610169565b005b34610000576100bd6101b2565b604080519115158252519081900360200190f35b34610000576100bd6101c2565b604080519115158252519081900360200190f35b34610000576100ae6101d2565b005b346100005761010e610229565b60408051600160a060020a039092168252519081900360200190f35b34610000576100ae610238565b005b34610000576100ae610274565b005b34610000576100ae600160a060020a0360043516610294565b005b60015481565b60005433600160a060020a039081169116141561007d576000805474ff0000000000000000000000000000000000000000191660a060020a1790555b6101af565b610000565b5b565b60005460a060020a900460ff1681565b60005460a860020a900460ff1681565b60005433600160a060020a039081169116141561007d5760005460a060020a900460ff16156101a5576000805474ff0000000000000000000000000000000000000000191690555b5b5b6101af565b610000565b5b565b600054600160a060020a031681565b60005460a060020a900460ff16156101af576000805475ff000000000000000000000000000000000000000000191660a860020a1790555b5b5b565b60005460a060020a900460ff1615156101af5760018054810190555b5b5b565b60005433600160a060020a039081169116141561007d57600160a060020a038116156102e3576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b6102ee565b610000565b5b505600a165627a7a72305820c6f22a5645362640b7c46cae50646585e832a4c1c8cf4037e252642de562dbc20029",
+    "events": {},
+    "updated_at": 1485442370516,
+    "links": {}
   }
 };
 
@@ -549,7 +540,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
-  Contract.contract_name   = Contract.prototype.contract_name   = "MetaCoin";
+  Contract.contract_name   = Contract.prototype.contract_name   = "StoppableMock";
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -589,6 +580,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
-    window.MetaCoin = Contract;
+    window.StoppableMock = Contract;
   }
 })();

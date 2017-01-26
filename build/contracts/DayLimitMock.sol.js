@@ -231,13 +231,13 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
-      throw new Error("MetaCoin error: Please call setProvider() first before calling new().");
+      throw new Error("DayLimitMock error: Please call setProvider() first before calling new().");
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
-      throw new Error("MetaCoin error: contract binary not set. Can't deploy new instance.");
+      throw new Error("DayLimitMock error: contract binary not set. Can't deploy new instance.");
     }
 
     var regex = /__[^_]+_+/g;
@@ -256,7 +256,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
-      throw new Error("MetaCoin contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of MetaCoin: " + unlinked_libraries);
+      throw new Error("DayLimitMock contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of DayLimitMock: " + unlinked_libraries);
     }
 
     var self = this;
@@ -297,7 +297,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
-      throw new Error("Invalid address passed to MetaCoin.at(): " + address);
+      throw new Error("Invalid address passed to DayLimitMock.at(): " + address);
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -308,7 +308,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
-      throw new Error("Cannot find deployed address: MetaCoin not deployed or address not set.");
+      throw new Error("Cannot find deployed address: DayLimitMock not deployed or address not set.");
     }
 
     return this.at(this.address);
@@ -351,120 +351,105 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     "abi": [
       {
         "constant": false,
-        "inputs": [
-          {
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "name": "getBalanceInEth",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "receiver",
-            "type": "address"
-          },
-          {
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "sendCoin",
-        "outputs": [
-          {
-            "name": "sufficient",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "name": "getBalance",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
         "inputs": [],
+        "name": "resetSpentToday",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "dailyLimit",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "totalSpending",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "lastDay",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_newLimit",
+            "type": "uint256"
+          }
+        ],
+        "name": "setDailyLimit",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
+        "name": "attemptSpend",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "spentToday",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
         "payable": false,
         "type": "constructor"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
       }
     ],
-    "unlinked_binary": "0x606060405234610000575b600160a060020a033216600090815260208190526040902061271090555b5b610223806100386000396000f300606060405263ffffffff60e060020a6000350416637bd703e8811461003a57806390b98a1114610065578063f8b2cb4f14610095575b610000565b3461000057610053600160a060020a03600435166100c0565b60408051918252519081900360200190f35b3461000057610081600160a060020a0360043516602435610140565b604080519115158252519081900360200190f35b3461000057610053600160a060020a03600435166101d8565b60408051918252519081900360200190f35b600073__ConvertLib____________________________6396e4ee3d6100e5846101d8565b60026000604051602001526040518363ffffffff1660e060020a028152600401808381526020018281526020019250505060206040518083038186803b156100005760325a03f415610000575050604051519150505b919050565b600160a060020a03331660009081526020819052604081205482901015610169575060006101d2565b600160a060020a0333811660008181526020818152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b92915050565b600160a060020a0381166000908152602081905260409020545b9190505600a165627a7a7230582088c9abf42f2d74d5df0919f22eb5bd610821170f23775224596dd5f9dff59f4f0029",
-    "events": {
-      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
-      }
-    },
-    "updated_at": 1485442370429,
-    "links": {
-      "ConvertLib": "0xd073b604507765f30790369f013400a5ab10ed6e"
-    },
-    "address": "0x1050b0ed2cadac4b52aaa9cb4d45f11b7325e760"
+    "unlinked_binary": "0x6060604052346100005760405160208061027483398101604052515b805b60008190556100376401000000006101dd61004882021704565b6002555b5060006003555b50610052565b6201518042045b90565b610213806100616000396000f300606060405236156100675763ffffffff60e060020a6000350416635c52c2f5811461006c57806367eeba0c1461007b5780636997bcab1461009a5780636b0c932d146100b9578063b20d30a9146100d8578063b349f6c7146100ea578063f059cf2b146100fc575b610000565b346100005761007961011b565b005b3461000057610088610126565b60408051918252519081900360200190f35b346100005761008861012c565b60408051918252519081900360200190f35b3461000057610088610132565b60408051918252519081900360200190f35b3461000057610079600435610138565b005b3461000057610079600435610145565b005b346100005761008861016c565b60408051918252519081900360200190f35b610123610172565b5b565b60005481565b60035481565b60025481565b6101418161017a565b5b50565b8061014f81610183565b156100675760038054830190555b610167565b610000565b5b5050565b60015481565b60006001555b565b60008190555b50565b60006002546101906101dd565b11156101a75760006001556101a36101dd565b6002555b600154828101108015906101c15750600054826001540111155b156101d4575060018054820181556101d8565b5060005b919050565b6201518042045b905600a165627a7a72305820307f961d2025f3603a52086e036515b4ec896fd3e69a03b8cbb958f87168a5690029",
+    "events": {},
+    "updated_at": 1485442370385,
+    "links": {}
   }
 };
 
@@ -549,7 +534,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
-  Contract.contract_name   = Contract.prototype.contract_name   = "MetaCoin";
+  Contract.contract_name   = Contract.prototype.contract_name   = "DayLimitMock";
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -589,6 +574,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
-    window.MetaCoin = Contract;
+    window.DayLimitMock = Contract;
   }
 })();
