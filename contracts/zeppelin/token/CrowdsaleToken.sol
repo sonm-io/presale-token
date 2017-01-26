@@ -15,13 +15,14 @@ contract CrowdsaleToken is StandardToken {
   string public symbol = "CRW";
   uint public decimals = 18;
 
-  // 1 ether = 500 example tokens 
+  // 1 ether = 500 example tokens
   uint PRICE = 500;
 
   function () payable {
     createTokens(msg.sender);
   }
-  
+
+  //Mul - умножение
   function createTokens(address recipient) payable {
     if (msg.value == 0) throw;
 
@@ -30,7 +31,7 @@ contract CrowdsaleToken is StandardToken {
     totalSupply = safeAdd(totalSupply, tokens);
     balances[recipient] = safeAdd(balances[recipient], tokens);
   }
-  
+
   // replace this with any other price function
   function getPrice() constant returns (uint result){
     return PRICE;

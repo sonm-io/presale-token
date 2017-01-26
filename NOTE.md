@@ -9,7 +9,10 @@ npm package, and also, above it, npm version of library is out of date even from
 
 Well, at least we found this bug with 'throw' and I copied right version of contract themselves.
 
-**TODO**: clean this issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.
+3. Deployed crowdsale contract from OpenZeppelin, it's seems works.. truffle console stil make me angry because it's not support default accounts and have strange behaviour, but simple functions looked like works
 
+**TODO**:
 
- 
+-- clean second issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.
+
+-- do crowdsale dummy, rewrite deploy script, rewrite tests(?)
