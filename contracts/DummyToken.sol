@@ -9,10 +9,10 @@ import "./zeppelin/token/StandardToken.sol";
  *
  * Simple ERC20 Token example, with crowdsale token creation
  */
-contract dummyToken is StandardToken {
+contract DummyToken is StandardToken {
 
-  string public name = "CrowdsaleToken";
-  string public symbol = "CRW";
+  string public name = "DummyToken";
+  string public symbol = "DMT";
   uint public decimals = 18;
 
   // 1 ether = 500 example tokens

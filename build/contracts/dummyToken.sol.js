@@ -231,13 +231,13 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
-      throw new Error("Bounty error: Please call setProvider() first before calling new().");
+      throw new Error("dummyToken error: Please call setProvider() first before calling new().");
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
-      throw new Error("Bounty error: contract binary not set. Can't deploy new instance.");
+      throw new Error("dummyToken error: contract binary not set. Can't deploy new instance.");
     }
 
     var regex = /__[^_]+_+/g;
@@ -256,7 +256,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
-      throw new Error("Bounty contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of Bounty: " + unlinked_libraries);
+      throw new Error("dummyToken contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of dummyToken: " + unlinked_libraries);
     }
 
     var self = this;
@@ -297,7 +297,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
-      throw new Error("Invalid address passed to Bounty.at(): " + address);
+      throw new Error("Invalid address passed to dummyToken.at(): " + address);
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -308,7 +308,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
-      throw new Error("Cannot find deployed address: Bounty not deployed or address not set.");
+      throw new Error("Cannot find deployed address: dummyToken not deployed or address not set.");
     }
 
     return this.at(this.address);
@@ -351,17 +351,12 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     "abi": [
       {
         "constant": true,
-        "inputs": [
-          {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "name": "researchers",
+        "inputs": [],
+        "name": "name",
         "outputs": [
           {
             "name": "",
-            "type": "address"
+            "type": "string"
           }
         ],
         "payable": false,
@@ -371,52 +366,19 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "constant": false,
         "inputs": [
           {
-            "name": "target",
+            "name": "_spender",
             "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
           }
         ],
-        "name": "claim",
-        "outputs": [],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [],
-        "name": "kill",
-        "outputs": [],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [],
-        "name": "withdrawPayments",
-        "outputs": [],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "owner",
+        "name": "approve",
         "outputs": [
           {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [],
-        "name": "createTarget",
-        "outputs": [
-          {
-            "name": "",
-            "type": "address"
+            "name": "success",
+            "type": "bool"
           }
         ],
         "payable": false,
@@ -424,13 +386,8 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       },
       {
         "constant": true,
-        "inputs": [
-          {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "name": "payments",
+        "inputs": [],
+        "name": "totalSupply",
         "outputs": [
           {
             "name": "",
@@ -442,11 +399,24 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       },
       {
         "constant": false,
-        "inputs": [],
-        "name": "checkInvariant",
+        "inputs": [
+          {
+            "name": "_from",
+            "type": "address"
+          },
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
+        "name": "transferFrom",
         "outputs": [
           {
-            "name": "",
+            "name": "success",
             "type": "bool"
           }
         ],
@@ -456,10 +426,76 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       {
         "constant": true,
         "inputs": [],
-        "name": "claimed",
+        "name": "decimals",
         "outputs": [
           {
             "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+          {
+            "name": "balance",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "getPrice",
+        "outputs": [
+          {
+            "name": "result",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
+        "name": "transfer",
+        "outputs": [
+          {
+            "name": "success",
             "type": "bool"
           }
         ],
@@ -470,12 +506,34 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "constant": false,
         "inputs": [
           {
-            "name": "newOwner",
+            "name": "recipient",
             "type": "address"
           }
         ],
-        "name": "transferOwnership",
+        "name": "createTokens",
         "outputs": [],
+        "payable": true,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          },
+          {
+            "name": "_spender",
+            "type": "address"
+          }
+        ],
+        "name": "allowance",
+        "outputs": [
+          {
+            "name": "remaining",
+            "type": "uint256"
+          }
+        ],
         "payable": false,
         "type": "function"
       },
@@ -487,30 +545,95 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "anonymous": false,
         "inputs": [
           {
-            "indexed": false,
-            "name": "createdAddress",
+            "indexed": true,
+            "name": "from",
             "type": "address"
+          },
+          {
+            "indexed": true,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
           }
         ],
-        "name": "TargetCreated",
+        "name": "Transfer",
         "type": "event"
-      }
-    ],
-    "events": {
-      "0xe62d909feaad4aecbcea8fef32a9b41552373e45f5acb7ce7fc0a997180e7ae5": {
+      },
+      {
         "anonymous": false,
         "inputs": [
           {
-            "indexed": false,
-            "name": "createdAddress",
+            "indexed": true,
+            "name": "owner",
             "type": "address"
+          },
+          {
+            "indexed": true,
+            "name": "spender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
           }
         ],
-        "name": "TargetCreated",
+        "name": "Approval",
+        "type": "event"
+      }
+    ],
+    "unlinked_binary": "0x60a0604052600a60608190527f44756d6d79546f6b656e0000000000000000000000000000000000000000000060809081526003805460008290527f44756d6d79546f6b656e00000000000000000000000000000000000000000014825590927fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b602060026001851615610100026000190190941693909304601f01929092048201929091906100d7565b828001600101855582156100d7579182015b828111156100d75782518255916020019190600101906100bc565b5b506100f89291505b808211156100f457600081556001016100e0565b5090565b50506040805180820190915260038082527f444d54000000000000000000000000000000000000000000000000000000000060209283019081526004805460008290528251600660ff1990911617825590937f8a35acfbc15ff81a39ae7d344fd709f28e8600b4aa8c65c6b64bfe7fe36bd19b60026001841615610100026000190190931692909204601f0104810192916101bb565b828001600101855582156101bb579182015b828111156101bb5782518255916020019190600101906101a0565b5b506101dc9291505b808211156100f457600081556001016100e0565b5090565b505060126005556101f460065534610000575b6107da806101fe6000396000f300606060405236156100935763ffffffff60e060020a60003504166306fdde0381146100a5578063095ea7b31461013257806318160ddd1461016257806323b872dd14610181578063313ce567146101b757806370a08231146101d657806395d89b411461020157806398d5fdca1461028e578063a9059cbb146102ad578063cedbbeee146102dd578063dd62ed3e146102f3575b6100a35b6100a033610324565b5b565b005b34610000576100b2610394565b6040805160208082528351818301528351919283929083019185019080838382156100f8575b8051825260208311156100f857601f1990920191602091820191016100d8565b505050905090810190601f1680156101245780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b346100005761014e600160a060020a0360043516602435610422565b604080519115158252519081900360200190f35b346100005761016f61048d565b60408051918252519081900360200190f35b346100005761014e600160a060020a0360043581169060243516604435610493565b604080519115158252519081900360200190f35b346100005761016f610596565b60408051918252519081900360200190f35b346100005761016f600160a060020a036004351661059c565b60408051918252519081900360200190f35b34610000576100b26105bb565b6040805160208082528351818301528351919283929083019185019080838382156100f8575b8051825260208311156100f857601f1990920191602091820191016100d8565b505050905090810190601f1680156101245780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b346100005761016f610649565b60408051918252519081900360200190f35b346100005761014e600160a060020a0360043516602435610650565b604080519115158252519081900360200190f35b6100a3600160a060020a0360043516610324565b005b346100005761016f600160a060020a0360043581169060243516610704565b60408051918252519081900360200190f35b600034151561033257610000565b6103433461033e610649565b610731565b90506103516000548261075d565b6000908155600160a060020a038316815260016020526040902054610376908261075d565b600160a060020a0383166000908152600160205260409020555b5050565b6003805460408051602060026001851615610100026000190190941693909304601f8101849004840282018401909252818152929183018282801561041a5780601f106103ef5761010080835404028352916020019161041a565b820191906000526020600020905b8154815290600101906020018083116103fd57829003601f168201915b505050505081565b600160a060020a03338116600081815260026020908152604080832094871680845294825280832086905580518681529051929493927f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925929181900390910190a35060015b92915050565b60005481565b600160a060020a0380841660009081526002602090815260408083203385168452825280832054938616835260019091528120549091906104d4908461075d565b600160a060020a0380861660009081526001602052604080822093909355908716815220546105039084610785565b600160a060020a0386166000908152600160205260409020556105268184610785565b600160a060020a038087166000818152600260209081526040808320338616845282529182902094909455805187815290519288169391927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929181900390910190a3600191505b509392505050565b60055481565b600160a060020a0381166000908152600160205260409020545b919050565b6004805460408051602060026001851615610100026000190190941693909304601f8101849004840282018401909252818152929183018282801561041a5780601f106103ef5761010080835404028352916020019161041a565b820191906000526020600020905b8154815290600101906020018083116103fd57829003601f168201915b505050505081565b6006545b90565b600160a060020a0333166000908152600160205260408120546106739083610785565b600160a060020a0333811660009081526001602052604080822093909355908516815220546106a2908361075d565b600160a060020a038085166000818152600160209081526040918290209490945580518681529051919333909316927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef92918290030190a35060015b92915050565b600160a060020a038083166000908152600260209081526040808320938516835292905220545b92915050565b600082820261075284158061074d575083858381156100005704145b61079e565b8091505b5092915050565b600082820161075284821080159061074d5750838210155b61079e565b8091505b5092915050565b60006107938383111561079e565b508082035b92915050565b8015156107aa57610000565b5b505600a165627a7a7230582041d409e0d6ade75cc868e6f142dddda37d235fad6b8965169e9bd8f67746cdc50029",
+    "events": {
+      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "Transfer",
+        "type": "event"
+      },
+      "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "name": "spender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "Approval",
         "type": "event"
       }
     },
-    "updated_at": 1485452155161,
+    "updated_at": 1485452155314,
     "links": {}
   }
 };
@@ -596,7 +719,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
-  Contract.contract_name   = Contract.prototype.contract_name   = "Bounty";
+  Contract.contract_name   = Contract.prototype.contract_name   = "dummyToken";
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -636,6 +759,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
-    window.Bounty = Contract;
+    window.dummyToken = Contract;
   }
 })();
