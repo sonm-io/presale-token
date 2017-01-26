@@ -1,0 +1,6 @@
+contract('DummyToken', function(accounts){
+
+
+
+  
+});

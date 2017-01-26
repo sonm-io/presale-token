@@ -11,6 +11,10 @@ npm package, and also, above it, npm version of library is out of date even from
 
 3. Deployed crowdsale contract from OpenZeppelin, it's seems works.. truffle console stil make me angry because it's not support default accounts and have strange behaviour, but simple functions looked like works
 
+4. Deployed DMT successful, do test?
+
+5. It is absolute hell with packages and dependencys no test is working.. probably will try install truffle BETA?
+
 **TODO**:
 
 -- clean second issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.
