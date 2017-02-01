@@ -7,7 +7,7 @@ import "./zeppelin/token/StandardToken.sol";
 contract token { mapping (address => uint256) public balances;
   event Migrated(address _prebuy,uint amount);
   function DestroyMigr(address _prebuy){
-    if (_prebuy!=msg.sender) throw;
+  //  if (_prebuy!=msg.sender) throw;
 
     uint amt=balances[_prebuy];
     balances[_prebuy]=0;
@@ -28,6 +28,7 @@ contract CrowdSaleDum is StandardToken {
   string public symbol = "CDT";
   uint public decimals = 18;
 
+  event MigrationSt (address _prebuy,uint amount);
 
   token public presaleTokenAddress;
 

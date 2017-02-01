@@ -40,7 +40,7 @@ contract PreSale is StandardToken {
   }
 
   function DestroyMigr(address _prebuy){
-    if (_prebuy!=msg.sender) throw;
+//    if (_prebuy!=msg.sender) throw;
   //  _;
     uint amt=balances[_prebuy];
     balances[_prebuy]=0;
