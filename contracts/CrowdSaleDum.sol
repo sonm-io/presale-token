@@ -38,6 +38,9 @@ contract CrowdSaleDum is StandardToken {
   event MigrationSt (address _prebuy,uint amount);
   event tokenaddrget(token tok);
   event initpresbal(uint inittok);
+//  event Buy(address indexed sender, uint eth, uint fbt);
+
+
 
   token public presaleTokenAddress;
 
