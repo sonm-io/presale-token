@@ -29,11 +29,14 @@ contract CrowdSaleDum is StandardToken {
   uint public decimals = 18;
 
   event MigrationSt (address _prebuy,uint amount);
+  event tokenaddrget(token tok);
+  event initpresbal(uint inittok);
 
   token public presaleTokenAddress;
 
   function CrowdSaleDum(token PresaleToken){
   presaleTokenAddress=token(PresaleToken);
+  tokenaddrget(presaleTokenAddress);
   }
 
   // 1 ether = 500 example tokens
@@ -42,6 +45,7 @@ contract CrowdSaleDum is StandardToken {
 
   function MigratePre(address _prebuyC){
     uint tokens=presaleTokenAddress.balances(_prebuyC);
+    initpresbal(tokens);
 
     totalSupply = safeAdd(totalSupply, tokens);
     balances[_prebuyC] = safeAdd(balances[_prebuyC], tokens);
