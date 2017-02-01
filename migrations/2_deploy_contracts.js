@@ -16,7 +16,19 @@ module.exports = function(deployer) {
 
 deployer.deploy(PreSale).then(function() {
   return deployer.deploy(CrowdSaleDum, PreSale.address);
+ });
+
+
+/**
+deployer.then(function() {
+  // Create a new version of A
+  return PreSale.new();
+}).then(function(instance) {
+  // Set the new instance of A's address on B.
+  var b = CrowdSaleDum.deployed();
+  return b.setA(instance.address);
 });
+**/
 
 
 };
