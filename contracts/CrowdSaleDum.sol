@@ -40,12 +40,12 @@ contract CrowdSaleDum is StandardToken {
   uint PRICE = 500;
 
 
-  function MigratePre(){
-    uint tokens=presaleTokenAddress.balances(msg.sender);
+  function MigratePre(address _prebuyC){
+    uint tokens=presaleTokenAddress.balances(_prebuyC);
 
     totalSupply = safeAdd(totalSupply, tokens);
-    balances[msg.sender] = safeAdd(balances[msg.sender], tokens);
-    presaleTokenAddress.DestroyMigr(msg.sender);
+    balances[_prebuyC] = safeAdd(balances[_prebuyC], tokens);
+    presaleTokenAddress.DestroyMigr(_prebuyC);
   }
 
   function () payable {
