@@ -4,16 +4,24 @@ pragma solidity ^0.4.4;
 import "./zeppelin/token/StandardToken.sol";
 
 
+contract token { mapping (address => uint256) public balances; }
+
+
 /*
  * CrowdsaleToken
  *
  * Simple ERC20 Token example, with crowdsale token creation
  */
-contract CrowdSaleDum is StandardToken {
+contract CrowdSaleDum is StandardToken (PresaleToken){
 
   string public name = "CrowdDummyToken";
   string public symbol = "CDT";
   uint public decimals = 18;
+
+
+  token public presaleTokenAddress;
+
+  presaleTokenAddress=token(PresaleToken);
 
   // 1 ether = 500 example tokens
   uint PRICE = 500;

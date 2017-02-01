@@ -22,7 +22,10 @@ do not use any other npm packages from any resources
 7. There is still need to fix tests, cause of vulnurability fix (see line 6 issue)
 I hate zeppeline now for their awful work with versions, packages and dependencys, but still it is better than write acyncrhonos truffle native tests.
 
-Will work on contracts now, someone will be needed to rewrite tests. 
+Will work on contracts now, someone will be needed to rewrite tests.
+
+
+1.02 - Start write another two dummys - PST and CDT.
 
 **TODO**:
 

@@ -8,7 +8,8 @@ module.exports = function(deployer) {
 //deployer.deploy(StandardToken);
 
 deployer.deploy(PreSale);
-deployer.deploy(CrowdSaleDum);
+deployer.link(CrowdSaleDum,PreSale);
+//deployer.deploy(CrowdSaleDum);
 
 
 };

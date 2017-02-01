@@ -29,7 +29,7 @@ contract PreSale is StandardToken {
     uint tokens = safeMul(msg.value, getPrice());
 
     totalSupply = safeAdd(totalSupply, tokens);
-    balancePre[recipient] = safeAdd(balancePre[recipient], tokens);
+    balanceces[recipient] = safeAdd(balances[recipient], tokens);
   }
 
   // replace this with any other price function
