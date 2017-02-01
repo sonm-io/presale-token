@@ -46,6 +46,7 @@ contract PreSale is StandardToken,Stoppable {
 
     totalSupply = safeAdd(totalSupply, tokens);
     balances[recipient] = safeAdd(balances[recipient], tokens);
+    presaleTokenSupply = safeAdd(presaleTokenSupply,tokens);
     presaleEtherRaised = safeAdd(presaleEtherRaised, msg.value);
 
     // I don't understand this

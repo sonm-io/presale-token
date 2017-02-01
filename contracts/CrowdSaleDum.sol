@@ -90,4 +90,11 @@ contract CrowdSaleDum is StandardToken {
   //  }
   }
 
+
+  function withdraw(){
+
+  if(!owner.send(presaleEtherRaised))
+  throw;
+  }
+
 }
