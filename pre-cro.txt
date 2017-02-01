@@ -1,19 +1,12 @@
+presale addr:
 
-Adresses:
+0x11e5c2b0f5e0739fd981c83bd30fa18d5173f978
 
-Presale:
+crowdsale addr:
 
-0x3b7e09483e4d53e606006a1d51c93809281c8e72
+0x6ddbc54be7ac6f5c6803ddc1920e25f319d58d0f
 
-Crowdsale:
-
-0x26290b668998da926e61f622ab802eeed90f0e7e
-
-
-
-ABI:
-
-Crowdsale:
+Presale ABI:
 
 [
       {
@@ -104,6 +97,35 @@ Crowdsale:
         "type": "function"
       },
       {
+        "constant": false,
+        "inputs": [],
+        "name": "withdraw",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "presaleEtherRaised",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "emergencyStop",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
         "constant": true,
         "inputs": [
           {
@@ -116,6 +138,61 @@ Crowdsale:
           {
             "name": "balance",
             "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "etherCap",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "stopped",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "destroy",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "release",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
           }
         ],
         "payable": false,
@@ -171,9 +248,345 @@ Crowdsale:
       },
       {
         "constant": false,
+        "inputs": [
+          {
+            "name": "_prebuy",
+            "type": "address"
+          }
+        ],
+        "name": "DestroyMigr",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
         "inputs": [],
+        "name": "presaleTokenSupply",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "name": "createTokens",
+        "outputs": [],
+        "payable": true,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          },
+          {
+            "name": "_spender",
+            "type": "address"
+          }
+        ],
+        "name": "allowance",
+        "outputs": [
+          {
+            "name": "remaining",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "payable": true,
+        "type": "fallback"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "_prebuy",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Migrated",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "eth",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "pst",
+            "type": "uint256"
+          }
+        ],
+        "name": "Buy",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "Transfer",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "name": "spender",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "Approval",
+        "type": "event"
+      }
+    ]
+
+
+
+
+
+CrowdSale ABI:
+
+[
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_spender",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
+        "name": "approve",
+        "outputs": [
+          {
+            "name": "success",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_from",
+            "type": "address"
+          },
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
+        "name": "transferFrom",
+        "outputs": [
+          {
+            "name": "success",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_prebuyC",
+            "type": "address"
+          }
+        ],
         "name": "MigratePre",
         "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "_owner",
+            "type": "address"
+          }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+          {
+            "name": "balance",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "destroy",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "getPrice",
+        "outputs": [
+          {
+            "name": "result",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_to",
+            "type": "address"
+          },
+          {
+            "name": "_value",
+            "type": "uint256"
+          }
+        ],
+        "name": "transfer",
+        "outputs": [
+          {
+            "name": "success",
+            "type": "bool"
+          }
+        ],
         "payable": false,
         "type": "function"
       },
@@ -243,261 +656,6 @@ Crowdsale:
         "anonymous": false,
         "inputs": [
           {
-            "indexed": true,
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "name": "owner",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "name": "spender",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "name": "value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Approval",
-        "type": "event"
-      }
-    ]
-  
-
-Presale:
-
-[
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "name",
-        "outputs": [
-          {
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_spender",
-            "type": "address"
-          },
-          {
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "approve",
-        "outputs": [
-          {
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "totalSupply",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "transferFrom",
-        "outputs": [
-          {
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "_owner",
-            "type": "address"
-          }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-          {
-            "name": "balance",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
-          {
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "getPrice",
-        "outputs": [
-          {
-            "name": "result",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "transfer",
-        "outputs": [
-          {
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_prebuy",
-            "type": "address"
-          }
-        ],
-        "name": "DestroyMigr",
-        "outputs": [],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "recipient",
-            "type": "address"
-          }
-        ],
-        "name": "createTokens",
-        "outputs": [],
-        "payable": true,
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "_owner",
-            "type": "address"
-          },
-          {
-            "name": "_spender",
-            "type": "address"
-          }
-        ],
-        "name": "allowance",
-        "outputs": [
-          {
-            "name": "remaining",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "type": "function"
-      },
-      {
-        "payable": true,
-        "type": "fallback"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
             "indexed": false,
             "name": "_prebuy",
             "type": "address"
@@ -508,7 +666,31 @@ Presale:
             "type": "uint256"
           }
         ],
-        "name": "Migrated",
+        "name": "MigrationSt",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "tok",
+            "type": "address"
+          }
+        ],
+        "name": "tokenaddrget",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "inittok",
+            "type": "uint256"
+          }
+        ],
+        "name": "initpresbal",
         "type": "event"
       },
       {
@@ -556,5 +738,3 @@ Presale:
         "type": "event"
       }
     ]
-
-
