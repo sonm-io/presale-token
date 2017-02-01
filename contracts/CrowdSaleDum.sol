@@ -21,7 +21,7 @@ contract CrowdSaleDum is StandardToken {
 
   token public presaleTokenAddress;
 
-  function CrowdSaleDum(PresaleToken){
+  function CrowdSaleDum(token PresaleToken){
   presaleTokenAddress=token(PresaleToken);
   }
 

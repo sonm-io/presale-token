@@ -1,5 +1,5 @@
 module.exports = function(deployer) {
-//  deployer.deploy(ConvertLib);
+ //deployer.deploy(ConvertLib);
 //  deployer.autolink();
 //  deployer.deploy(MetaCoin);
 
@@ -7,9 +7,16 @@ module.exports = function(deployer) {
 //deployer.deploy(DummyToken);
 //deployer.deploy(StandardToken);
 
-deployer.deploy(PreSale);
-deployer.link(CrowdSaleDum,PreSale);
+//deployer.deploy(PreSale);
+//deployer.link(CrowdSaleDum,PreSale);
+ //deployer.autolink();
 //deployer.deploy(CrowdSaleDum);
+//deployer.deploy(CrowdSaleDum);
+
+
+deployer.deploy(PreSale).then(function() {
+  return deployer.deploy(CrowdSaleDum, PreSale.address);
+});
 
 
 };
