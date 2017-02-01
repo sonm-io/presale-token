@@ -12,7 +12,7 @@ contract token { mapping (address => uint256) public balances; }
  *
  * Simple ERC20 Token example, with crowdsale token creation
  */
-contract CrowdSaleDum is StandardToken (PresaleToken){
+contract CrowdSaleDum is StandardToken {
 
   string public name = "CrowdDummyToken";
   string public symbol = "CDT";
@@ -21,7 +21,9 @@ contract CrowdSaleDum is StandardToken (PresaleToken){
 
   token public presaleTokenAddress;
 
+  function CrowdSaleDum(PresaleToken){
   presaleTokenAddress=token(PresaleToken);
+  }
 
   // 1 ether = 500 example tokens
   uint PRICE = 500;
