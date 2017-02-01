@@ -48,6 +48,10 @@ contract PreSale is StandardToken {
 
   }
 
-
+  function destroy() { // so funds not locked in contract forever
+    //  if (msg.sender == organizer) {
+        suicide(msg.sender); // send funds to organizer
+  //    }
+}
 
 }

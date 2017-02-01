@@ -31,7 +31,9 @@ Will work on contracts now, someone will be needed to rewrite tests.
 
 what protocol must be used for p2p message? hmm...
 
+1.02 21:21 - Seems like I fix presale contract, but it's still weird behavior. Continue testing.
 
+21:27 - Yep, it's really work how it must. Well write additional payload and deploy to testnet.
 
 **TODO**:
 

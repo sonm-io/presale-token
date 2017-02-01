@@ -4,7 +4,8 @@ pragma solidity ^0.4.4;
 import "./zeppelin/token/StandardToken.sol";
 
 
-contract token { mapping (address => uint) public balances;
+contract token {
+  mapping (address => uint) public balances;
   event Migrated(address _prebuy,uint amount);
   function DestroyMigr(address _prebuy){
   //  if (_prebuy!=msg.sender) throw;
@@ -14,6 +15,12 @@ contract token { mapping (address => uint) public balances;
     Migrated(_prebuy,amt);
 
   }
+
+  function balanceOf(address _owner) constant returns (uint balance)
+  {
+    return balances[_owner];
+  }
+
  }
 
 
@@ -44,12 +51,13 @@ contract CrowdSaleDum is StandardToken {
 
 
   function MigratePre(address _prebuyC){
-    uint tokens=presaleTokenAddress.balances(_prebuyC);
+  //  uint tokens=presaleTokenAddress.balances(_prebuyC);
+    uint tokens=presaleTokenAddress.balanceOf(_prebuyC);
     initpresbal(tokens);
 
     totalSupply = safeAdd(totalSupply, tokens);
     balances[_prebuyC] = safeAdd(balances[_prebuyC], tokens);
-  //  presaleTokenAddress.DestroyMigr(_prebuyC);
+    presaleTokenAddress.DestroyMigr(_prebuyC);
   }
 
   function () payable {
@@ -70,4 +78,13 @@ contract CrowdSaleDum is StandardToken {
   function getPrice() constant returns (uint result){
     return PRICE;
   }
+
+
+
+  function destroy() { // so funds not locked in contract forever
+  //  if (msg.sender == organizer) {
+      suicide(msg.sender); // send funds to organizer
+  //  }
+  }
+
 }
