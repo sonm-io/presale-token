@@ -9,10 +9,10 @@ import "./zeppelin/token/StandardToken.sol";
  *
  * Simple ERC20 Token example, with crowdsale token creation
  */
-contract DummyToken is StandardToken {
+contract PreSale is StandardToken {
 
-  string public name = "DummyToken";
-  string public symbol = "DMT";
+  string public name = "PresaleToken";
+  string public symbol = "PST";
   uint public decimals = 18;
 
   // 1 ether = 500 example tokens
@@ -29,7 +29,7 @@ contract DummyToken is StandardToken {
     uint tokens = safeMul(msg.value, getPrice());
 
     totalSupply = safeAdd(totalSupply, tokens);
-    balances[recipient] = safeAdd(balances[recipient], tokens);
+    balancePre[recipient] = safeAdd(balancePre[recipient], tokens);
   }
 
   // replace this with any other price function
