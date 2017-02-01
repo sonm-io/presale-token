@@ -366,11 +366,59 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         ],
         "payable": false,
         "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_prebuy",
+            "type": "address"
+          }
+        ],
+        "name": "DestroyMigr",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "_prebuy",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Migrated",
+        "type": "event"
       }
     ],
-    "unlinked_binary": "0x6060604052346000575b6095806100176000396000f300606060405263ffffffff60e060020a60003504166327e235e381146022575b6000565b34600057604573ffffffffffffffffffffffffffffffffffffffff600435166057565b60408051918252519081900360200190f35b600060208190529081526040902054815600a165627a7a723058205cac82e483bcb7fabeb16922c968dfd12d51401ac03b796c066a7e293c8828a30029",
-    "events": {},
-    "updated_at": 1485909943872,
+    "unlinked_binary": "0x606060405234610000575b610128806100196000396000f300606060405263ffffffff60e060020a60003504166327e235e38114602c578063c3c7d45c146054575b6000565b346000576042600160a060020a0360043516606c565b60408051918252519081900360200190f35b34600057606a600160a060020a0360043516607e565b005b60006020819052908152604090205481565b600033600160a060020a031682600160a060020a0316141515609e576000565b50600160a060020a03811660008181526020818152604080832080549390558051938452908301829052805191927f8b80bd19aea7b735bc6d75db8d6adbe18b28c30d62b3555245eb67b2340caedc929081900390910190a15b50505600a165627a7a72305820e19a42651ff2e3c4d598d22f142f49f30791c42c45bf1e39488e97100d8f74c80029",
+    "events": {
+      "0x8b80bd19aea7b735bc6d75db8d6adbe18b28c30d62b3555245eb67b2340caedc": {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "_prebuy",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Migrated",
+        "type": "event"
+      }
+    },
+    "updated_at": 1485910922584,
     "links": {}
   }
 };

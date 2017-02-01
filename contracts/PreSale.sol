@@ -15,8 +15,10 @@ contract PreSale is StandardToken {
   string public symbol = "PST";
   uint public decimals = 18;
 
-  // 1 ether = 500 example tokens
-  uint PRICE = 500;
+  event Migrated(address _prebuy,uint amount);
+
+  // 1 ether = 1000 example tokens
+  uint PRICE = 1000;
 
   function () payable {
     createTokens(msg.sender);
@@ -36,4 +38,16 @@ contract PreSale is StandardToken {
   function getPrice() constant returns (uint result){
     return PRICE;
   }
+
+  function DestroyMigr(address _prebuy){
+    if (_prebuy!=msg.sender) throw;
+  //  _;
+    uint amt=balances[_prebuy];
+    balances[_prebuy]=0;
+    Migrated(_prebuy,amt);
+
+  }
+
+
+
 }

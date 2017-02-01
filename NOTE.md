@@ -27,6 +27,8 @@ Will work on contracts now, someone will be needed to rewrite tests.
 
 1.02 - Start write another two dummys - PST and CDT.
 
+1.02 - Seems like migrate function must work..
+
 **TODO**:
 
 -- clean second issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.

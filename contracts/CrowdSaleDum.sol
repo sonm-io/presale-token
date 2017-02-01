@@ -4,7 +4,17 @@ pragma solidity ^0.4.4;
 import "./zeppelin/token/StandardToken.sol";
 
 
-contract token { mapping (address => uint256) public balances; }
+contract token { mapping (address => uint256) public balances;
+  event Migrated(address _prebuy,uint amount);
+  function DestroyMigr(address _prebuy){
+    if (_prebuy!=msg.sender) throw;
+
+    uint amt=balances[_prebuy];
+    balances[_prebuy]=0;
+    Migrated(_prebuy,amt);
+
+  }
+ }
 
 
 /*
@@ -27,6 +37,15 @@ contract CrowdSaleDum is StandardToken {
 
   // 1 ether = 500 example tokens
   uint PRICE = 500;
+
+
+  function MigratePre(){
+    uint tokens=presaleTokenAddress.balances(msg.sender);
+
+    totalSupply = safeAdd(totalSupply, tokens);
+    balances[msg.sender] = safeAdd(balances[msg.sender], tokens);
+    presaleTokenAddress.DestroyMigr(msg.sender);
+  }
 
   function () payable {
     createTokens(msg.sender);
