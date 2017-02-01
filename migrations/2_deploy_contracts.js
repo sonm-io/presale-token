@@ -19,6 +19,7 @@ deployer.deploy(PreSale).then(function() {
  });
 
 
+
 /**
 deployer.then(function() {
   // Create a new version of A

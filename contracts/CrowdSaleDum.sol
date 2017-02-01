@@ -4,7 +4,7 @@ pragma solidity ^0.4.4;
 import "./zeppelin/token/StandardToken.sol";
 
 
-contract token { mapping (address => uint256) public balances;
+contract token { mapping (address => uint) public balances;
   event Migrated(address _prebuy,uint amount);
   function DestroyMigr(address _prebuy){
   //  if (_prebuy!=msg.sender) throw;
@@ -49,7 +49,7 @@ contract CrowdSaleDum is StandardToken {
 
     totalSupply = safeAdd(totalSupply, tokens);
     balances[_prebuyC] = safeAdd(balances[_prebuyC], tokens);
-    presaleTokenAddress.DestroyMigr(_prebuyC);
+  //  presaleTokenAddress.DestroyMigr(_prebuyC);
   }
 
   function () payable {
