@@ -39,4 +39,10 @@ what protocol must be used for p2p message? hmm...
 
 -- clean second issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.
 
--- do crowdsale dummy, rewrite deploy script, rewrite tests(?)
+--Modifier TokenMgr must be added in presale. (last queu)
+
+--MarketCup to presale
+
+--withdraw to both contr.
+
+--add payload
