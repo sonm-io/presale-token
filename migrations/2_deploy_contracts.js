@@ -12,12 +12,13 @@ module.exports = function(deployer) {
  //deployer.autolink();
 //deployer.deploy(CrowdSaleDum);
 //deployer.deploy(CrowdSaleDum);
+deployer.deploy(MultisigWallet,web3.eth.accounts[0],1,1);
 
-
+/**
 deployer.deploy(PreSale).then(function() {
   return deployer.deploy(CrowdSaleDum, PreSale.address);
  });
-
+**/
 
 
 /**
