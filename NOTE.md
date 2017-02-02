@@ -37,13 +37,16 @@ what protocol must be used for p2p message? hmm...
 22^40 - Played with MultisigWallet - weird behavior.
 
 2.02 - Added some modificators. Not tested yet.
+17:19 - add all modifiers? Still not tested yet.
+
+
 
 
 **TODO**:
 
 -- clean second issue, when guys from OpenZeppelin handle merge from @SCBuergel and write properly test. In opposition we need to run test's ourself in truffle syntax.
 
---Modifier TokenMgr must be added in presale. (last queu)
+
 
 
 

@@ -1,3 +1,16 @@
+
+
+/**
+
+
+
+  THIS IS JUST CROWDSALE DUMMY TO SHOW HOW MIGRATE FUNCTION WORKS
+
+**/
+
+
+
+
 pragma solidity ^0.4.4;
 
 

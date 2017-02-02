@@ -38,14 +38,14 @@ contract PreSale is StandardToken,Stoppable {
 
 
   function () payable {
-    createTokens(msg.sender);
+    BuyToken(msg.sender);
   }
 
 
 
 
   // function buy.
-  function createTokens(address recipient) payable {
+  function BuyToken(address recipient) payable {
     if (msg.value == 0) throw;
 
     if (safeAdd(presaleEtherRaised,msg.value)>etherCap || stopped) throw;
