@@ -80,8 +80,8 @@ contract PreSale is StandardToken,Stoppable {
 
   function withdraw(){
 
-  if(!owner.send(presaleEtherRaised))
-  throw;
+ // if(!owner.send(presaleEtherRaised))
+ // throw;
   }
 
 
