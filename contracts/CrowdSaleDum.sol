@@ -2,7 +2,7 @@ pragma solidity ^0.4.4;
 
 
 import "./zeppelin/token/StandardToken.sol";
-
+import "./zeppelin/lifecycle/Stoppable.sol";
 
 contract token {
   mapping (address => uint) public balances;
@@ -29,16 +29,18 @@ contract token {
  *
  * Simple ERC20 Token example, with crowdsale token creation
  */
-contract CrowdSaleDum is StandardToken {
+contract CrowdSaleDum is StandardToken,Stoppable {
 
   string public name = "CrowdDummyToken";
   string public symbol = "CDT";
   uint public decimals = 18;
 
   event MigrationSt (address _prebuy,uint amount);
-  event tokenaddrget(token tok);
-  event initpresbal(uint inittok);
-//  event Buy(address indexed sender, uint eth, uint fbt);
+
+  //event tokenaddrget(token tok);
+//  event initpresbal(uint inittok);
+
+  event Buy(address indexed sender, uint eth, uint fbt);
 
 
 
@@ -56,7 +58,7 @@ contract CrowdSaleDum is StandardToken {
   function MigratePre(address _prebuyC){
   //  uint tokens=presaleTokenAddress.balances(_prebuyC);
     uint tokens=presaleTokenAddress.balanceOf(_prebuyC);
-    initpresbal(tokens);
+  //  initpresbal(tokens);
 
     totalSupply = safeAdd(totalSupply, tokens);
     balances[_prebuyC] = safeAdd(balances[_prebuyC], tokens);
@@ -75,6 +77,19 @@ contract CrowdSaleDum is StandardToken {
 
     totalSupply = safeAdd(totalSupply, tokens);
     balances[recipient] = safeAdd(balances[recipient], tokens);
+
+    presaleTokenSupply = safeAdd(presaleTokenSupply,tokens);
+    presaleEtherRaised = safeAdd(presaleEtherRaised, msg.value);
+
+    // I don't understand this
+  //  if (!owner.call.value(msg.value)()) throw; //immediately send Ether to founder address
+
+  // We can use it if we want immediately send.
+  //if(!owner.send(msg.value)) throw;
+
+    Buy(recipient, msg.value, tokens);
+
+
   }
 
   // replace this with any other price function
@@ -83,14 +98,14 @@ contract CrowdSaleDum is StandardToken {
   }
 
 
-
+// For test only
   function destroy() { // so funds not locked in contract forever
   //  if (msg.sender == organizer) {
       suicide(msg.sender); // send funds to organizer
   //  }
   }
 
-
+//We have use this version of withdraw or we can use straight-forwarding function.
   function withdraw(){
 
   if(!owner.send(presaleEtherRaised))

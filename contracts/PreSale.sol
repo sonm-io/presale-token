@@ -63,6 +63,7 @@ contract PreSale is StandardToken,Stoppable {
     return PRICE;
   }
 
+// This function is clean balance after migration
   function DestroyMigr(address _prebuy){
 //    if (_prebuy!=msg.sender) throw;
   //  _;
@@ -72,12 +73,15 @@ contract PreSale is StandardToken,Stoppable {
 
   }
 
+
+// Function destroy is for test only.
   function destroy() { // so funds not locked in contract forever
     //  if (msg.sender == organizer) {
         suicide(msg.sender); // send funds to organizer
   //    }
 }
 
+// We have use this version of withdraw or we can use straight-forwarding function.
   function withdraw(){
 
   if(!owner.send(presaleEtherRaised))
