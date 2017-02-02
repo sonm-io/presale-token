@@ -4,10 +4,12 @@ pragma solidity ^0.4.4;
 import "./zeppelin/token/StandardToken.sol";
 import "./zeppelin/lifecycle/Stoppable.sol";
 
-contract token {
+contract token is Stoppable {
   mapping (address => uint) public balances;
+  address public manager=owner;
   event Migrated(address _prebuy,uint amount);
-  function DestroyMigr(address _prebuy){
+
+  function DestroyMigr(address _prebuy) onlyManager{
   //  if (_prebuy!=msg.sender) throw;
 
     uint amt=balances[_prebuy];
@@ -15,6 +17,25 @@ contract token {
     Migrated(_prebuy,amt);
 
   }
+
+  /**
+  modifier manager is for invoke migrate function.
+
+
+  **/
+
+    modifier onlyManager() {
+      if (msg.sender == manager)
+        _;
+      else
+        throw;
+    }
+
+    function transferManager(address newManager) onlyManager {
+      if (newManager != address(0)) manager = newManager;
+    }
+
+
 
   function balanceOf(address _owner) constant returns (uint balance)
   {
@@ -37,7 +58,7 @@ contract CrowdSaleDum is StandardToken,Stoppable {
 
   event MigrationSt (address _prebuy,uint amount);
 
-  //event tokenaddrget(token tok);
+
 //  event initpresbal(uint inittok);
 
   event Buy(address indexed sender, uint eth, uint fbt);
@@ -48,12 +69,19 @@ contract CrowdSaleDum is StandardToken,Stoppable {
 
   function CrowdSaleDum(token PresaleToken){
   presaleTokenAddress=token(PresaleToken);
-  tokenaddrget(presaleTokenAddress);
+
   }
 
   // 1 ether = 500 example tokens
+
   uint PRICE = 500;
 
+//Cap not set for this contract yet.
+//  uint public etherCap = 20000 * 10**18; //max amount raised during crowdsale (200k USD)
+
+
+  uint public saleTokenSupply = 0; //this will keep track of the token supply created during the presale
+  uint public saleEtherRaised = 0; //this will keep track of the Ether raised during the presale
 
   function MigratePre(address _prebuyC){
   //  uint tokens=presaleTokenAddress.balances(_prebuyC);
@@ -78,8 +106,8 @@ contract CrowdSaleDum is StandardToken,Stoppable {
     totalSupply = safeAdd(totalSupply, tokens);
     balances[recipient] = safeAdd(balances[recipient], tokens);
 
-    presaleTokenSupply = safeAdd(presaleTokenSupply,tokens);
-    presaleEtherRaised = safeAdd(presaleEtherRaised, msg.value);
+    saleTokenSupply = safeAdd(saleTokenSupply,tokens);
+    saleEtherRaised = safeAdd(saleEtherRaised, msg.value);
 
     // I don't understand this
   //  if (!owner.call.value(msg.value)()) throw; //immediately send Ether to founder address
@@ -108,7 +136,7 @@ contract CrowdSaleDum is StandardToken,Stoppable {
 //We have use this version of withdraw or we can use straight-forwarding function.
   function withdraw(){
 
-  if(!owner.send(presaleEtherRaised))
+  if(!owner.send(saleEtherRaised))
   throw;
   }
 

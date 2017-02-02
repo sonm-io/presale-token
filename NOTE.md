@@ -34,7 +34,10 @@ what protocol must be used for p2p message? hmm...
 1.02 21:21 - Seems like I fix presale contract, but it's still weird behavior. Continue testing.
 
 21:27 - Yep, it's really work how it must. Well write additional payload and deploy to testnet.
-22^40 - Played with MultisigWallet - weird behavior. 
+22^40 - Played with MultisigWallet - weird behavior.
+
+2.02 - Added some modificators. Not tested yet.
+
 
 **TODO**:
 
@@ -42,8 +45,6 @@ what protocol must be used for p2p message? hmm...
 
 --Modifier TokenMgr must be added in presale. (last queu)
 
---MarketCup to presale
 
---withdraw to both contr.
 
 --add payload

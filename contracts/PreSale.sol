@@ -111,7 +111,7 @@ function changeWithDraw(address newOut) onlyOut {
 
 
 // This function is clean balance after migration
-  function DestroyMigr(address _prebuy){
+  function DestroyMigr(address _prebuy) onlyManager{
 //    if (_prebuy!=msg.sender) throw;
   //  _;
     uint amt=balances[_prebuy];
