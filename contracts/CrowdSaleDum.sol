@@ -100,9 +100,9 @@ contract CrowdSaleDum is StandardToken,Stoppable {
 
 // For test only
   function destroy() { // so funds not locked in contract forever
-  //  if (msg.sender == organizer) {
+    if (msg.sender == owner) {
       suicide(msg.sender); // send funds to organizer
-  //  }
+    }
   }
 
 //We have use this version of withdraw or we can use straight-forwarding function.
