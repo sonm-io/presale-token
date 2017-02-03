@@ -42,7 +42,9 @@ what protocol must be used for p2p message? hmm...
 3.02 - Some comments clean.
 3.02, 1:38 - seems like it work on testrpc. will deploy it on testnet and check.
 
+Almost forgot - it's forward action for withdraw right now. Higher commission than in separete function, but more safety.
 
+3.02, 02:01 - Added stop mod, added overload, which block transfer in presale.
 
 
 **TODO**:

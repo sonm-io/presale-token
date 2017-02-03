@@ -44,6 +44,7 @@ contract PreSale is StandardToken,Stoppable {
 //----------BUY&PRICE section------------------------
 
   function () payable {
+    if(stopped=true) throw;
     BuyToken(msg.sender);
   }
 
@@ -52,6 +53,9 @@ contract PreSale is StandardToken,Stoppable {
 
   // function buy.
   function BuyToken(address recipient) payable {
+
+    if(stopped=true) throw;
+
     if (msg.value == 0) throw;
 
     if (safeAdd(presaleEtherRaised,msg.value)>etherCap || stopped) throw;
@@ -139,7 +143,36 @@ function changeWithDraw(address newOut) onlyOut {
 
 //------------
 
+//-----------OVERLOAD for TRANSFER (BLOCK)-------------
+function transfer(address _to, uint _value) returns (bool success) {
+  throw;
+/**
+  balances[msg.sender] = safeSub(balances[msg.sender], _value);
+  balances[_to] = safeAdd(balances[_to], _value);
+  Transfer(msg.sender, _to, _value);
 
+  return true;
+**/
+
+}
+
+function transferFrom(address _from, address _to, uint _value) returns (bool success) {
+
+  throw;
+
+/**
+  var _allowance = allowed[_from][msg.sender];
+
+  balances[_to] = safeAdd(balances[_to], _value);
+  balances[_from] = safeSub(balances[_from], _value);
+  allowed[_from][msg.sender] = safeSub(_allowance, _value);
+  Transfer(_from, _to, _value);
+  return true;
+**/
+
+}
+
+//-----------------------------------------------------------
 
 
 // Function destroy is for test only. Probably we will keep this to destroy this contract after crowdsale
