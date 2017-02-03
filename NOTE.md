@@ -40,6 +40,7 @@ what protocol must be used for p2p message? hmm...
 17:19 - add all modifiers? Still not tested yet.
 
 3.02 - Some comments clean.
+3.02, 1:38 - seems like it work on testrpc. will deploy it on testnet and check.
 
 
 
