@@ -29,13 +29,19 @@ contract PreSale is StandardToken,Stoppable {
   event Migrated(address _prebuy,uint amount);
   event Buy(address indexed sender, uint eth, uint pst);
 
-  // 1 ether = 1000 example tokens
-  uint PRICE = 1000;
+
+//------INITIAL VALUES-----------
+  // 1 ether = 200 example tokens
+  uint PRICE = 200;
+  // We are distribute first 4 000 000 tokens for 200 000$ (USD).
   uint public etherCap = 20000 * 10**18; //max amount raised during crowdsale (200k USD)
   uint public presaleTokenSupply = 0; //this will keep track of the token supply created during the presale
   uint public presaleEtherRaised = 0; //this will keep track of the Ether raised during the presale
+//--------------
 
 
+
+//----------BUY&PRICE section------------------------
 
   function () payable {
     BuyToken(msg.sender);
@@ -57,8 +63,9 @@ contract PreSale is StandardToken,Stoppable {
     presaleTokenSupply = safeAdd(presaleTokenSupply,tokens);
     presaleEtherRaised = safeAdd(presaleEtherRaised, msg.value);
 
-    // I don't understand this
-  //  if (!withdraw.call.value(msg.value)()) throw; //immediately send Ether to founder address
+
+    if (!withdraw.call.value(msg.value)()) throw;   //immediately send Ether to withdraw address.
+
 
   // We can use it if we want immediately send.
   //if(!withdraw.send(msg.value)) throw;
@@ -66,16 +73,21 @@ contract PreSale is StandardToken,Stoppable {
     Buy(recipient, msg.value, tokens);
   }
 
-  // replace this with any other price function
+
+  // price in presale are fixed
   function getPrice() constant returns (uint result){
     return PRICE;
   }
+//---------------------------------------------------------
 
 
+
+//------------MIGRATION--------------------------------------------
 /**
 modifier manager is for invoke migrate function.
-
-
+for default manager = owner. Later, when crowdsale is deployed, manager address
+switched for presale address.
+DestroyMigr can be invoked only by this address.
 **/
 
   modifier onlyManager() {
@@ -89,9 +101,28 @@ modifier manager is for invoke migrate function.
     if (newManager != address(0)) manager = newManager;
   }
 
+  // This function is clean balance after migration
+    function DestroyMigr(address _prebuy) onlyManager{
+  //    if (_prebuy!=msg.sender) throw;
+    //  _;
+      uint amt=balances[_prebuy];
+      balances[_prebuy]=0;
+      Migrated(_prebuy,amt);
+    }
+
+
+//-------------WITHDRAW modifiers-------------
 
 /**
-withdraw change
+Withraw funs is automatical (see line 62)
+This function is only to change this address.
+
+Logic: first withdraw is owner address, then this address is changing to
+multisig wallet address and canot be changed one more time.
+
+Reason: I cannot set construction parameter of multisig because multisig
+is not compile through truffle. We have to set this manually :(
+
 
 **/
 
@@ -110,31 +141,22 @@ function changeWithDraw(address newOut) onlyOut {
 
 
 
-// This function is clean balance after migration
-  function DestroyMigr(address _prebuy) onlyManager{
-//    if (_prebuy!=msg.sender) throw;
-  //  _;
-    uint amt=balances[_prebuy];
-    balances[_prebuy]=0;
-    Migrated(_prebuy,amt);
-  }
 
-
-// Function destroy is for test only.
-  function destroy() { // so funds not locked in contract forever
+// Function destroy is for test only. Probably we will keep this to destroy this contract after crowdsale
+  function destroy() onlyOwner { // so funds not locked in contract forever
       if (msg.sender == owner) {
         suicide(msg.sender); // send funds to organizer
       }
 }
 
 
-
+/**
 // We have use this version of withdraw or we can use straight-forwarding function.
   function withdraw(){
 
   if(!withdraw.send(presaleEtherRaised))
   throw;
   }
-
+**/
 
 }

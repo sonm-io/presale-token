@@ -5,6 +5,7 @@
 
 
   THIS IS JUST CROWDSALE DUMMY TO SHOW HOW MIGRATE FUNCTION WORKS
+  IT IS NOT ACTUALLY REAL CONTRACT FOR CROWDSALE
 
 **/
 
@@ -16,6 +17,11 @@ pragma solidity ^0.4.4;
 
 import "./zeppelin/token/StandardToken.sol";
 import "./zeppelin/lifecycle/Stoppable.sol";
+
+
+//-----------TOKEN CONTRACT dummy
+// This dummy need to remote invokation of function of PreSale contract.
+// And this probably look ugly.
 
 contract token is Stoppable {
   mapping (address => uint) public balances;

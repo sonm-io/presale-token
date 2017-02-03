@@ -39,6 +39,8 @@ what protocol must be used for p2p message? hmm...
 2.02 - Added some modificators. Not tested yet.
 17:19 - add all modifiers? Still not tested yet.
 
+3.02 - Some comments clean.
+
 
 
 
