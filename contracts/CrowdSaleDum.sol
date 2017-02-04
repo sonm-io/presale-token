@@ -28,6 +28,8 @@ contract token is Stoppable {
   address public manager=owner;
   event Migrated(address _prebuy,uint amount);
 
+
+// TODO - change it to msg.sender.
   function DestroyMigr(address _prebuy) onlyManager{
   //  if (_prebuy!=msg.sender) throw;
 
@@ -104,6 +106,7 @@ contract CrowdSaleDum is StandardToken,Stoppable {
 
   function MigratePre(address _prebuyC){
   //  uint tokens=presaleTokenAddress.balances(_prebuyC);
+  if (_prebuyC!=msg.sender) throw;
     uint tokens=presaleTokenAddress.balanceOf(_prebuyC);
   //  initpresbal(tokens);
 
