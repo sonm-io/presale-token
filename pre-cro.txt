@@ -1,12 +1,12 @@
-presale addr:
+presale addr testnet:
 
-0x11e5c2b0f5e0739fd981c83bd30fa18d5173f978
+0x07b059dc3e8d40c4998acb2647fc4d047fb1705e
 
-crowdsale addr:
+crowdsale addr testnet:
+0x11c3c090849f3656956c56052f49ef4827faf32d
 
-0x6ddbc54be7ac6f5c6803ddc1920e25f319d58d0f
 
-Presale ABI:
+presale ABI:
 
 [
       {
@@ -84,6 +84,19 @@ Presale ABI:
         "type": "function"
       },
       {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "newOut",
+            "type": "address"
+          }
+        ],
+        "name": "changeWithDraw",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
         "constant": true,
         "inputs": [],
         "name": "decimals",
@@ -97,10 +110,15 @@ Presale ABI:
         "type": "function"
       },
       {
-        "constant": false,
+        "constant": true,
         "inputs": [],
         "name": "withdraw",
-        "outputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
         "payable": false,
         "type": "function"
       },
@@ -112,6 +130,19 @@ Presale ABI:
           {
             "name": "",
             "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "manager",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
           }
         ],
         "payable": false,
@@ -250,6 +281,19 @@ Presale ABI:
         "constant": false,
         "inputs": [
           {
+            "name": "newManager",
+            "type": "address"
+          }
+        ],
+        "name": "transferManager",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
             "name": "_prebuy",
             "type": "address"
           }
@@ -270,19 +314,6 @@ Presale ABI:
           }
         ],
         "payable": false,
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "recipient",
-            "type": "address"
-          }
-        ],
-        "name": "createTokens",
-        "outputs": [],
-        "payable": true,
         "type": "function"
       },
       {
@@ -318,6 +349,19 @@ Presale ABI:
         "name": "transferOwnership",
         "outputs": [],
         "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "name": "BuyToken",
+        "outputs": [],
+        "payable": true,
         "type": "function"
       },
       {
@@ -417,13 +461,7 @@ Presale ABI:
 
 
 
-
-
-
-
-
-
-CrowdSale ABI:
+crowdsale ABI:
 
 [
       {
@@ -515,6 +553,14 @@ CrowdSale ABI:
       },
       {
         "constant": false,
+        "inputs": [],
+        "name": "withdraw",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
         "inputs": [
           {
             "name": "_prebuyC",
@@ -522,6 +568,14 @@ CrowdSale ABI:
           }
         ],
         "name": "MigratePre",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "emergencyStop",
         "outputs": [],
         "payable": false,
         "type": "function"
@@ -545,10 +599,44 @@ CrowdSale ABI:
         "type": "function"
       },
       {
+        "constant": true,
+        "inputs": [],
+        "name": "stopped",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
         "constant": false,
         "inputs": [],
         "name": "destroy",
         "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "release",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
         "payable": false,
         "type": "function"
       },
@@ -601,6 +689,19 @@ CrowdSale ABI:
         "type": "function"
       },
       {
+        "constant": true,
+        "inputs": [],
+        "name": "saleTokenSupply",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
         "constant": false,
         "inputs": [
           {
@@ -628,6 +729,19 @@ CrowdSale ABI:
       },
       {
         "constant": true,
+        "inputs": [],
+        "name": "saleEtherRaised",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": true,
         "inputs": [
           {
             "name": "_owner",
@@ -645,6 +759,19 @@ CrowdSale ABI:
             "type": "uint256"
           }
         ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
         "payable": false,
         "type": "function"
       },
@@ -683,24 +810,22 @@ CrowdSale ABI:
         "anonymous": false,
         "inputs": [
           {
-            "indexed": false,
-            "name": "tok",
+            "indexed": true,
+            "name": "sender",
             "type": "address"
-          }
-        ],
-        "name": "tokenaddrget",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
+          },
           {
             "indexed": false,
-            "name": "inittok",
+            "name": "eth",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "fbt",
             "type": "uint256"
           }
         ],
-        "name": "initpresbal",
+        "name": "Buy",
         "type": "event"
       },
       {
