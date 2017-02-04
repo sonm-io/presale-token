@@ -2,22 +2,23 @@ pragma solidity ^0.4.4;
 
 
 import "./zeppelin/token/StandardToken.sol";
-import "./zeppelin/lifecycle/Stoppable.sol";
+//import "./zeppelin/lifecycle/Stoppable.sol";
+import "./zeppelin/ownership/Ownable.sol";
 
 /*
  * CrowdsaleToken
  *
  * Simple ERC20 Token example, with crowdsale token creation
  */
-contract PreSale is StandardToken,Stoppable {
+contract PreSale is StandardToken,Ownable {
 
   string public name = "PresaleToken";
   string public symbol = "PST";
   uint public decimals = 18;
 
 
-  address public withdraw=owner;
-  address public manager=owner;
+  address public withdraw=msg.sender;
+  address public manager=msg.sender;
 
   // Initial founder address (set in constructor)
   // All deposited ETH will be instantly forwarded to this address.
@@ -37,14 +38,27 @@ contract PreSale is StandardToken,Stoppable {
   uint public etherCap = 20000 * 10**18; //max amount raised during crowdsale (200k USD)
   uint public presaleTokenSupply = 0; //this will keep track of the token supply created during the presale
   uint public presaleEtherRaised = 0; //this will keep track of the Ether raised during the presale
-//--------------
 
+  bool public stopped = false;
+//  stopped=false;
 
+  modifier stopInEmergency { if (!stopped) _; }
+  modifier onlyInEmergency { if (stopped) _; }
+
+  // called by the owner on emergency, triggers stopped state
+  function emergencyStop() external onlyOwner {
+    stopped = true;
+  }
+
+  // called by the owner on end of emergency, returns to normal state
+  function release() external onlyOwner onlyInEmergency {
+    stopped = false;
+  }
 
 //----------BUY&PRICE section------------------------
 
   function () payable {
-    if(stopped=true) throw;
+    if(stopped==true) throw;
     BuyToken(msg.sender);
   }
 
@@ -54,7 +68,7 @@ contract PreSale is StandardToken,Stoppable {
   // function buy.
   function BuyToken(address recipient) payable {
 
-    if(stopped=true) throw;
+    if(stopped==true) throw;
 
     if (msg.value == 0) throw;
 
@@ -72,7 +86,7 @@ contract PreSale is StandardToken,Stoppable {
 
 
   // We can use it if we want immediately send.
-  //if(!withdraw.send(msg.value)) throw;
+//  if(!withdraw.send(msg.value)) throw;
 
     Buy(recipient, msg.value, tokens);
   }
@@ -118,8 +132,7 @@ DestroyMigr can be invoked only by this address.
 //-------------WITHDRAW modifiers-------------
 
 /**
-Withraw funs is automatical (see line 62)
-This function is only to change this address.
+Withdraw is automatical (see line 71)
 
 Logic: first withdraw is owner address, then this address is changing to
 multisig wallet address and canot be changed one more time.
@@ -183,8 +196,8 @@ function transferFrom(address _from, address _to, uint _value) returns (bool suc
 }
 
 
+
 /**
-// We have use this version of withdraw or we can use straight-forwarding function.
   function withdraw(){
 
   if(!withdraw.send(presaleEtherRaised))
