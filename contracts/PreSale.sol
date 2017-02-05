@@ -17,8 +17,9 @@ contract PreSale is StandardToken,Ownable {
   uint public decimals = 18;
 
 
-  address public withdraw=msg.sender;
-  address public manager=msg.sender;
+  address public withdraw;
+
+  address public manager;
 
   // Initial founder address (set in constructor)
   // All deposited ETH will be instantly forwarded to this address.
@@ -39,20 +40,41 @@ contract PreSale is StandardToken,Ownable {
   uint public presaleTokenSupply = 0; //this will keep track of the token supply created during the presale
   uint public presaleEtherRaised = 0; //this will keep track of the Ether raised during the presale
 
+
+// Don't touch this - flag must have strong definition.
+// Look up for original Stoppable contract for reviw issue.
   bool public stopped = false;
 //  stopped=false;
 
   modifier stopInEmergency { if (!stopped) _; }
   modifier onlyInEmergency { if (stopped) _; }
 
+
+
+
   // called by the owner on emergency, triggers stopped state
-  function emergencyStop() external onlyOwner {
+  function emergencyStop() external onlyManager {
     stopped = true;
   }
 
   // called by the owner on end of emergency, returns to normal state
-  function release() external onlyOwner onlyInEmergency {
+  function release() external onlyManager onlyInEmergency {
     stopped = false;
+  }
+
+
+
+
+  function PreSale(address withdrawInput,address managerInput){
+
+// perhaps we need to if-else condition here like if !withdrawInput { withdraw=msg.sender; }
+
+    withdraw=withdrawInput;
+
+    manager=managerInput;
+
+
+
   }
 
 //----------BUY&PRICE section------------------------
@@ -81,12 +103,8 @@ contract PreSale is StandardToken,Ownable {
     presaleTokenSupply = safeAdd(presaleTokenSupply,tokens);
     presaleEtherRaised = safeAdd(presaleEtherRaised, msg.value);
 
-
-    if (!withdraw.call.value(msg.value)()) throw;   //immediately send Ether to withdraw address.
-
-
   // We can use it if we want immediately send.
-//  if(!withdraw.send(msg.value)) throw;
+  if(!withdraw.send(msg.value)) throw;
 
     Buy(recipient, msg.value, tokens);
   }
@@ -132,25 +150,10 @@ DestroyMigr can be invoked only by this address.
 //-------------WITHDRAW modifiers-------------
 
 /**
-Withdraw is automatical (see line 71)
-
-Logic: first withdraw is owner address, then this address is changing to
-multisig wallet address and canot be changed one more time.
-
-Reason: I cannot set construction parameter of multisig because multisig
-is not compile through truffle. We have to set this manually :(
-
-
+Withdraw is automatical (see line 107)
 **/
 
-modifier onlyOut() {
-  if (msg.sender == withdraw)
-    _;
-  else
-    throw;
-}
-
-function changeWithDraw(address newOut) onlyOut {
+function changeWithDraw(address newOut) onlyManager {
   if (newOut != address(0)) withdraw = newOut;
 }
 
@@ -159,50 +162,16 @@ function changeWithDraw(address newOut) onlyOut {
 //-----------OVERLOAD for TRANSFER (BLOCK)-------------
 function transfer(address _to, uint _value) returns (bool success) {
   throw;
-/**
-  balances[msg.sender] = safeSub(balances[msg.sender], _value);
-  balances[_to] = safeAdd(balances[_to], _value);
-  Transfer(msg.sender, _to, _value);
-
-  return true;
-**/
-
 }
 
 function transferFrom(address _from, address _to, uint _value) returns (bool success) {
 
   throw;
-
-/**
-  var _allowance = allowed[_from][msg.sender];
-
-  balances[_to] = safeAdd(balances[_to], _value);
-  balances[_from] = safeSub(balances[_from], _value);
-  allowed[_from][msg.sender] = safeSub(_allowance, _value);
-  Transfer(_from, _to, _value);
-  return true;
-**/
-
 }
 
 //-----------------------------------------------------------
 
 
-// Function destroy is for test only. Probably we will keep this to destroy this contract after crowdsale
-  function destroy() onlyOwner { // so funds not locked in contract forever
-      if (msg.sender == owner) {
-        suicide(msg.sender); // send funds to organizer
-      }
-}
 
-
-
-/**
-  function withdraw(){
-
-  if(!withdraw.send(presaleEtherRaised))
-  throw;
-  }
-**/
 
 }
