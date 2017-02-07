@@ -1,6 +1,0 @@
-contract('CrowdsaleToken', function(accounts){
-
-
-
-
-});
