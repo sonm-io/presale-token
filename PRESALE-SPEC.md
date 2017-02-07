@@ -3,6 +3,7 @@
 Required Functionality
 ----------------------
 
+  - Presale token contract must conform to ERC20 spec.
   - Investors are able to exchange Ethers for presale tokens at fixed rate
     (200 tokens per eth).
   - Investors are able to migrate their tokens to new contract after dev team
@@ -10,11 +11,11 @@ Required Functionality
   - Investors are not able to buy tokens when total amount of sold tokens
     reached its limit (4.000.000 tokens).
   - Investors are not able to transfer tokens to each other.
-  - Investors are not able to exchange their token for ether through the
+  - Investors are not able to exchange their tokens for ether through the
     presale contract.
-  - Token contract is administered by joint decisions of dev team (members of
+  - Presale contract is administered by joint decisions of dev team (members of
     the multisig contract).
-  - Dev team is able to withdraw all Ethers from presale contract to the
+  - Dev team is able to withdraw all Ethers from the presale contract to the
     multisig contract.
   - Dev team is able to pause/resume presale at any time:
     - any non-administrative action (buy, migrate) is rejected if contract is
