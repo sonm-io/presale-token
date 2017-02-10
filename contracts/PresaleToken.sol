@@ -48,7 +48,7 @@ contract PresaleToken {
     // functions on this contract.
     address private tokenManager;
     // Crowdsale manager has exclusive priveleges to burn presale tokens.
-    address private crowdsaleManager;
+    address public crowdsaleManager;
 
 
     modifier onlyTokenManager()     { if(msg.sender != tokenManager) throw; _; }
@@ -69,7 +69,7 @@ contract PresaleToken {
     /*/
 
     /// @dev Lets buy you some tokens.
-    function buy() public payable {
+    function buyTokens() public payable {
         // Available only if presale is running.
         if(currentPhase != Phase.Running) throw;
 
@@ -84,7 +84,7 @@ contract PresaleToken {
 
     /// @dev Returns number of tokens owned by given address.
     /// @param _owner Address of token owner.
-    function burn(address _owner) public {
+    function burnTokens(address _owner) public {
         // Available only during migration phase
         if(currentPhase != Phase.Migrating) throw;
 
@@ -95,7 +95,7 @@ contract PresaleToken {
         LogBurn(_owner, tokens);
 
         // Automatically switch phase when migration is done.
-        if(totalSupply == 0) setPhase(Phase.Migrated);
+        if(totalSupply == 0) setPresalePhase(Phase.Migrated);
     }
 
 
@@ -110,7 +110,7 @@ contract PresaleToken {
      *  Administrative functions
     /*/
 
-    function setPhase(Phase _nextPhase) public
+    function setPresalePhase(Phase _nextPhase) public
         onlyTokenManager
     {
         bool canSwitchPhase
@@ -136,7 +136,9 @@ contract PresaleToken {
         onlyTokenManager
     {
         // Available at any phase.
-        if(this.balance == 0 || !tokenManager.send(this.balance)) throw;
+        if(this.balance == 0) {
+            if(!tokenManager.send(this.balance)) throw;
+        }
     }
 
 
