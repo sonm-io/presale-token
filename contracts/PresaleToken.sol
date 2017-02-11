@@ -24,7 +24,7 @@ contract PresaleToken {
     uint   public decimals = 18;
 
     uint private PRICE = 200; // 200 DPT per Ether
-    uint private TOKEN_SUPPLY_LIMIT = 4000000;
+    uint private TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
 
 
     /*/
@@ -84,7 +84,9 @@ contract PresaleToken {
 
     /// @dev Returns number of tokens owned by given address.
     /// @param _owner Address of token owner.
-    function burnTokens(address _owner) public {
+    function burnTokens(address _owner) public
+        onlyCrowdsaleManager
+    {
         // Available only during migration phase
         if(currentPhase != Phase.Migrating) throw;
 
@@ -95,7 +97,10 @@ contract PresaleToken {
         LogBurn(_owner, tokens);
 
         // Automatically switch phase when migration is done.
-        if(totalSupply == 0) setPresalePhase(Phase.Migrated);
+        if(totalSupply == 0) {
+            currentPhase = Phase.Migrated;
+            LogPhaseSwitch(Phase.Migrated);
+        }
     }
 
 
@@ -136,7 +141,7 @@ contract PresaleToken {
         onlyTokenManager
     {
         // Available at any phase.
-        if(this.balance == 0) {
+        if(this.balance > 0) {
             if(!tokenManager.send(this.balance)) throw;
         }
     }
@@ -156,7 +161,7 @@ contract PresaleToken {
     {
         // Available only if nothing hapened yet or if presale is totally
         // completed.
-        if(currentPhase != Phase.Created || currentPhase != Phase.Migrated)
+        if(currentPhase != Phase.Created && currentPhase != Phase.Migrated)
           throw;
         suicide(tokenManager); // send remaining funds to tokenManager
     }
