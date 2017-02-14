@@ -1,2 +1,16 @@
-build
-installed_contracts
+
+# truffle
+/build
+
+# ethpm
+/installed_contracts
+
+# npm
+/node_modules
+
+# testing
+/coverage
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

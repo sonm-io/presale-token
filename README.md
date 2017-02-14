@@ -25,8 +25,17 @@ Compile, Test, Deploy
 
 Requires Node.js version >= 6.5.1 and truffle@^3.1.1.
 
+**Contracts**
+
 ```
   $ truffle install
   $ truffle test
   $ truffle migrate --network testnet --reset
+```
+
+**UI**
+
+```
+  $ npm install
+  $ npm start
 ```
