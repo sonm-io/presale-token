@@ -68,17 +68,21 @@ contract PresaleToken {
      *  Public functions
     /*/
 
+    function() payable {
+        buyTokens(msg.sender);
+    }
+
     /// @dev Lets buy you some tokens.
-    function buyTokens() public payable {
+    function buyTokens(address _buyer) public payable {
         // Available only if presale is running.
         if(currentPhase != Phase.Running) throw;
 
         if(msg.value == 0) throw;
         uint newTokens = msg.value * PRICE;
         if (totalSupply + newTokens > TOKEN_SUPPLY_LIMIT) throw;
-        balance[msg.sender] += newTokens;
+        balance[_buyer] += newTokens;
         totalSupply += newTokens;
-        LogBuy(msg.sender, newTokens);
+        LogBuy(_buyer, newTokens);
     }
 
 
