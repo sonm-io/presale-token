@@ -31,6 +31,13 @@ Requires Node.js version >= 6.5.1 and truffle@^3.1.1.
   $ truffle install
   $ truffle test
   $ truffle migrate --network testnet --reset
+Using network 'testnet'.
+
+Running migration: 1_deploy_contracts.js
+  Deploying TokenManager...
+  TokenManager: 0x2b171c2805fcc52c1cd4592ed73079cda464dc60
+  Deploying PresaleToken...
+  PresaleToken: 0x517fe605f789956bb6bcebd23431c9fc3b866b3e
 ```
 
 **UI**
