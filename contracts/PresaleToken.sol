@@ -19,12 +19,12 @@ contract PresaleToken {
     /*/
      *  Constants
     /*/
-    string public name = "DilationPresaleToken";
+    string public name = "Dilation Presale Token";
     string public symbol = "DPT";
     uint   public decimals = 18;
 
-    uint private PRICE = 200; // 200 DPT per Ether
-    uint private TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
+    uint public PRICE = 200; // 200 DPT per Ether
+    uint public TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
 
 
     /*/
@@ -38,17 +38,17 @@ contract PresaleToken {
         Migrating,
         Migrated
     }
+
     Phase public currentPhase = Phase.Created;
-
-
     uint public totalSupply = 0; // amount of tokens already sold
-    mapping (address => uint256) private balance;
 
     // Token manager has exclusive priveleges to call administrative
     // functions on this contract.
-    address private tokenManager;
+    address public tokenManager;
     // Crowdsale manager has exclusive priveleges to burn presale tokens.
     address public crowdsaleManager;
+
+    mapping (address => uint256) private balance;
 
 
     modifier onlyTokenManager()     { if(msg.sender != tokenManager) throw; _; }
