@@ -29,35 +29,37 @@ export default class App extends React.Component {
     this.state = {
       tokenAddress: "0x517fe605f789956bb6bcebd23431c9fc3b866b3e",
       tokenAddressError: null,
-      isLoading: false,
-      isValidAddress: null
+      tokenInfo: null
     };
   }
 
+
   componentDidMount() {
-    this._checkToken();
+    this._loadTokenInfo()
   }
 
-  // debounce
-  _checkToken = () => {
-    if(!this.state.tokenAddress) this.setState({isLoading: false});
 
-    this.setState(
-      { isLoading: true },
-      () => {
-        const t = PresaleToken.at(this.state.tokenAddress);
-        t.name.call().then((name, err) => {
-          if(name === "DilationPresaleToken") {
-            this.setState({isLoading: false, isValidAddress: true});
-          } else {
-            this.setState({
-              isLoading: false,
-              isValidAddress: false,
-              tokenAddressError: "Invalid token address, please check again"
-            });
-          }
-        })
+  _loadTokenInfo = () => {
+    const t = PresaleToken.at(this.state.tokenAddress);
+    Promise
+      .all(
+        [ t.name.call()
+        , t.symbol.call()
+        , Promise.resolve(200) // FIXME: t.PRICE.call()
+        , t.totalSupply.call()
+        , t.tokenManager.call()
+        , t.currentPhase.call()
+        ])
+      .then(([name, symbol, price, supply, mgr, phase]) => {
+        const tokenInfo = {
+          name, symbol, price,
+          tokenManager: mgr,
+          currentPhase: phase.toNumber(),
+          supply: web3.fromWei(supply, "ether").toNumber(),  // FIXME: use decimals
+        };
+        this.setState({tokenInfo});
       })
+      .catch(err => this.setState({tokenAddressError: err}))
   }
 
 
@@ -70,6 +72,12 @@ export default class App extends React.Component {
 
 
   render() {
+    const spinner = (
+      <CircularProgress
+         size={80} thickness={5}
+         style={{display: 'block', margin: '20px auto'}}
+      />);
+
     const addressStyle = {
       textAlign: 'center',
       fontSize: '20px',
@@ -78,49 +86,47 @@ export default class App extends React.Component {
 
     return (
       <MuiThemeProvider>
-       <div className="App">
-         <TextField
-           hintText="Token address"
-           style={{margin: '20px 0'}}
-           inputStyle={addressStyle}
-           fullWidth={true}
-           errorText={this.state.tokenAddressError}
-           value={this.state.tokenAddress}
-           onChange={this._setTokenAddress}
-         />
-         { !window.web3 &&
-           <div>
-             <p>
-               No Ethereum network provider is detected.
-               There are several ways to fix this:
-             </p>
-             <ul>
-               <li>install <a href="https://metamask.io">MetaMask</a> browser plugin</li>
-               <li>install <a href="https://github.com/ethcore/parity-extension">Parity</a> browser plugin</li>
-               <li>open this page in <a href="https://github.com/ethereum/mist/releases">Mist</a> browser</li>
-             </ul>
-           </div>
-         }
-         { this.state.isLoading &&
-           <CircularProgress
-              size={80} thickness={5}
-              style={{display: 'block', margin: '20px auto'}}
-           />
-         }
-         { this.state.isValidAddress &&
-           <Tabs>
-             <Tab label="Token Info">
-               <TokenInfo presaleToken={this.state.tokenAddress}/>
-             </Tab>
-             <Tab label="Events">
-               <div><h2>Events</h2></div>
-             </Tab>
-             <Tab label="Actions">
-               <div><h2>Admin Actions</h2></div>
-             </Tab>
-           </Tabs>
-         }
-       </div>
+        <div className="App">
+          <TextField
+            hintText="Token address"
+            style={{margin: '20px 0'}}
+            inputStyle={addressStyle}
+            fullWidth={true}
+            errorText={this.state.tokenAddressError}
+            value={this.state.tokenAddress}
+            onChange={this._setTokenAddress}
+          />
+          { !window.web3 &&
+            <div>
+              <p>
+                No Ethereum network provider is detected.
+                There are several ways to fix this:
+              </p>
+              <ul>
+                <li>install <a href="https://metamask.io">MetaMask</a> browser plugin</li>
+                <li>install <a href="https://github.com/ethcore/parity-extension">Parity</a> browser plugin</li>
+                <li>open this page in <a href="https://github.com/ethereum/mist/releases">Mist</a> browser</li>
+              </ul>
+            </div>
+          }
+          { this.state.isLoading && spinner }
+          { this.state.tokenInfo &&
+            <Tabs>
+              <Tab label="Token Info" value="info">
+                <TokenInfo info={this.state.tokenInfo}/>
+              </Tab>
+              <Tab label="Events" value="events">
+                { this.state.latestEvents
+                    ? <h2>Events</h2>
+                    : spinner
+                }
+              </Tab>
+              <Tab label="Actions" value="actions">
+                <div><h2>Admin Actions</h2></div>
+              </Tab>
+            </Tabs>
+          }
+        </div>
       </MuiThemeProvider>
     );
   }
