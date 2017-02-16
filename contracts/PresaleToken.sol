@@ -19,6 +19,7 @@ contract PresaleToken {
     /*/
      *  Constants
     /*/
+
     string public name = "Dilation Presale Token";
     string public symbol = "DPT";
     uint   public decimals = 18;
@@ -130,14 +131,13 @@ contract PresaleToken {
                 && _nextPhase == Phase.Migrating
                 && crowdsaleManager != 0x0)
             || (currentPhase == Phase.Paused && _nextPhase == Phase.Running)
+                // switch to migrated only if everyting is migrated
             || (currentPhase == Phase.Migrating && _nextPhase == Phase.Migrated
                 && totalSupply == 0);
 
         if(!canSwitchPhase) throw;
-        else {
-            currentPhase = _nextPhase;
-            LogPhaseSwitch(_nextPhase);
-        }
+        currentPhase = _nextPhase;
+        LogPhaseSwitch(_nextPhase);
     }
 
 

@@ -40,7 +40,7 @@ contract("TokenManager", () => {
   )
 
   it("should be able to withdraw funds", () =>
-    token.buyTokens({value: 3})
+    token.buyTokens(a, {value: 3})
       .then(() => {
         const balance = web3.eth.getBalance(manager.address);
         return assert.equal(0, balance.toFixed(), "token manager has no ether initially");

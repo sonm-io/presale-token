@@ -53,10 +53,8 @@ contract TokenManager is MultiSigWallet {
         bytes memory data =
           hex"4defd1bf0000000000000000000000000000000000000000000000000000000000000000";
 
-        // assembly { mstore(add(data, 32+4), _mgr) }
-        for (uint i = 0; i < 20; i++) {
-          data[4+12+i] = byte(uint8(uint(_mgr) / (2**(8*(19 - i)))));
-        }
+        // 36 = 4 bytes of signature hash + 32 bytes of array length
+        assembly { mstore(add(data, 36), _mgr) }
 
         uint txId = super.submitTransaction(_token, 0, data);
         LogTokenSetCrowdsaleManager(_mgr, txId);
