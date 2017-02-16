@@ -53,7 +53,7 @@ contract TokenManager is MultiSigWallet {
         bytes memory data =
           hex"4defd1bf0000000000000000000000000000000000000000000000000000000000000000";
 
-        // assembly { mstore(add(data, 4), _mgr) }
+        // assembly { mstore(add(data, 32+4), _mgr) }
         for (uint i = 0; i < 20; i++) {
           data[4+12+i] = byte(uint8(uint(_mgr) / (2**(8*(19 - i)))));
         }
