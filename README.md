@@ -43,6 +43,9 @@ Running migration: 1_deploy_contracts.js
 **UI**
 
 ```
+  $ cd web-ui
   $ npm install
   $ npm start
 ```
+
+You can also deploy UI to gh-pages with `npm run deploy`.

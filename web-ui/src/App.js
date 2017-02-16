@@ -4,8 +4,8 @@ import CircularProgress     from 'material-ui/CircularProgress';
 import {Tabs, Tab}          from 'material-ui/Tabs';
 import TextField            from 'material-ui/TextField';
 
-import PresaleToken_json    from '../build/contracts/PresaleToken';
-import TokenManager_json    from '../build/contracts/TokenManager';
+import PresaleToken_json    from '../../build/contracts/PresaleToken';
+import TokenManager_json    from '../../build/contracts/TokenManager';
 import Truffle              from 'truffle-contract';
 
 import TokenInfo            from './TokenInfo';
@@ -29,7 +29,8 @@ export default class App extends React.Component {
     this.state = {
       tokenAddress: "0x517fe605f789956bb6bcebd23431c9fc3b866b3e",
       tokenAddressError: null,
-      tokenInfo: null
+      tokenInfo: null,
+      isLoading: true
     };
   }
 
@@ -57,9 +58,9 @@ export default class App extends React.Component {
           currentPhase: phase.toNumber(),
           supply: web3.fromWei(supply, "ether").toNumber(),  // FIXME: use decimals
         };
-        this.setState({tokenInfo});
+        this.setState({isLoading: false, tokenInfo});
       })
-      .catch(err => this.setState({tokenAddressError: err}))
+      .catch(err => this.setState({isLoading: false, tokenAddressError: err}))
   }
 
 

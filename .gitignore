@@ -6,7 +6,8 @@
 /installed_contracts
 
 # npm
-/node_modules
+node_modules
+/web-ui/build
 
 # testing
 /coverage
