@@ -47,6 +47,7 @@ export default function(props) {
           {row("Symbol", info.symbol)}
           {row("Price", `${info.price} ${info.symbol} per 1 ETH`)}
           {row("Tokens sold", `${info.supply} ${info.symbol}`)}
+          {row("Current balance", `${info.balance} ETH`)}
         </TableBody>
       </Table>
       { phaseBlock[info.currentPhase+1] }

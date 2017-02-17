@@ -4,24 +4,13 @@ import CircularProgress     from 'material-ui/CircularProgress';
 import {Tabs, Tab}          from 'material-ui/Tabs';
 import TextField            from 'material-ui/TextField';
 
-import PresaleToken_json    from '../../build/contracts/PresaleToken';
-import TokenManager_json    from '../../build/contracts/TokenManager';
-import Truffle              from 'truffle-contract';
-
 import Const                from './constants';
+import API                  from './tokenAPI';
 import TokenInfo            from './TokenInfo';
 import TokenActions         from './TokenActions';
 import './App.css';
 
-
-const PresaleToken = Truffle(PresaleToken_json);
-const TokenManager = Truffle(TokenManager_json);
 const web3 = window.web3;
-if(web3) {
-  PresaleToken.setProvider(web3.currentProvider);
-  TokenManager.setProvider(web3.currentProvider);
-}
-
 
 
 export default class App extends React.Component {
@@ -30,24 +19,39 @@ export default class App extends React.Component {
 
     this.state = {
       tokenAddress: Const.DEFAULT_TOKEN_ADDRESS,
-      tokenAddressError: null,
+      tokenError: null,
       tokenInfo: null,
-      isLoading: true,
-      defaultAccount: null
+      defaultAccount: null,
     };
   }
 
 
   _trackAccountInterval = null;
-  componentDidMount() {
-    this._loadTokenInfo()
 
-    // track account changes
-    this._trackAccountInterval = setInterval(() => {
-      if (web3.eth.accounts[0] !== this.state.defaultAccount) {
-        this.setState({defaultAccount: web3.eth.accounts[0]})
-      }
-    }, 600);
+  componentDidMount() {
+    if(!web3)  return;
+    this.setState({isLoading: true}, () => {
+      API.getTokenInfo(this.state.tokenAddress)
+        .then(tokenInfo => {
+          this.setState({tokenInfo, defaultAccount: web3.eth.accounts[0]});
+
+          // track account changes
+          this._trackAccountInterval = setInterval(() => {
+            if (web3.eth.accounts[0] !== this.state.defaultAccount) {
+              this.setState({defaultAccount: web3.eth.accounts[0]})
+            }
+          }, 600);
+        })
+        .catch(err => {
+          console.log('ERROR', err);
+          this.setState({tokenError: "Unexpected error, sorry"})
+          if(err.INVALID_TOKEN_ADDRESS) {
+          } else if(err.INVALID_NETWORK_ID) {
+          } else if(err.INVALID_TOKEN_NAME) {
+          } else if(err.message) {
+          }
+        })
+    })
   }
 
 
@@ -56,48 +60,11 @@ export default class App extends React.Component {
   }
 
 
-  _loadTokenInfo = () => {
-    const t = PresaleToken.at(this.state.tokenAddress);
-    Promise
-      .all(
-        [ t.name.call()
-        , t.symbol.call()
-        , Promise.resolve(200) // FIXME: t.PRICE.call()
-        , t.totalSupply.call()
-        , t.tokenManager.call()
-        , t.currentPhase.call()
-        ])
-      .then(([name, symbol, price, supply, mgr, phase]) => this.setState({
-        isLoading: false,
-        tokenInfo: {
-          name, symbol, price,
-          tokenManager: mgr,
-          currentPhase: phase.toNumber(),
-          supply: web3.fromWei(supply, "ether"),  // FIXME: use decimals
-        }}))
-      .catch(err => this.setState({isLoading: false, tokenAddressError: err}))
-  }
-
-
-  _loadManagerInfo =  () => {
-    const managerAddress = this.state.tokenInfo.tokenManager;
-    const m = TokenManager.at(managerAddress);
-    web3.eth.getBalance(
-      managerAddress,
-      balance => m.getOwners.call().then(
-        managers => this.setState({
-          managerInfo: {
-            address: managerAddress,
-            balance: web3.fromWei(balance, "ether"),
-            managers
-          }})))
-  }
 
 
   _setTokenAddress = ev => {
     this.setState(
       {tokenAddress: ev.target.value},
-      this._loadTokenInfo
     );
   }
 
@@ -105,10 +72,6 @@ export default class App extends React.Component {
   _changeTab = tab => {
     switch(tab.props.value) {
       case "actions": {
-        if(!this.state.managerInfo) {
-          // FIXME: check if tokenInfo is loaded
-          this._loadManagerInfo();
-        }
         break;
       }
       default:
@@ -137,7 +100,7 @@ export default class App extends React.Component {
             style={{margin: '20px 0'}}
             inputStyle={addressStyle}
             fullWidth={true}
-            errorText={this.state.tokenAddressError}
+            errorText={this.state.tokenError}
             value={this.state.tokenAddress}
             onChange={this._setTokenAddress}
           />
@@ -157,7 +120,9 @@ export default class App extends React.Component {
               </p>
             </div>
           }
-          { this.state.isLoading && spinner }
+          { // address is not validated yet
+            window.web3 && !this.state.tokenInfo && !this.state.tokenError && spinner
+          }
           { this.state.tokenInfo &&
             <Tabs>
               <Tab label="Token Info" value="info">
@@ -170,13 +135,10 @@ export default class App extends React.Component {
                 }
               </Tab>
               <Tab label="Actions" value="actions" onActive={this._changeTab}>
-                { this.state.managerInfo
-                    ? <TokenActions
-                        info={this.state.managerInfo}
-                        defaultAccount={this.state.defaultAccount}
-                      />
-                    : spinner
-                }
+                <TokenActions
+                  info={this.state.tokenInfo}
+                  defaultAccount={this.state.defaultAccount}
+                />
               </Tab>
             </Tabs>
           }
