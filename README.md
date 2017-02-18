@@ -16,8 +16,8 @@ before investing or interacting with these contracts:
   - dev team is able to withdraw Ether at any time during or after presale.
 
 
-Refer to [Investor's Guide]() or [Administrator's Guide]() for more details on
-how to interact with the contracts.
+Refer to [Investor's Guide]() or [Administrator's Guide](docs/admins-guide.md)
+for more details on how to interact with the contracts.
 
 
 Compile, Test, Deploy
@@ -28,9 +28,9 @@ Requires Node.js version >= 6.5.1 and truffle@^3.1.1.
 **Contracts**
 
 ```
-  $ truffle install
-  $ truffle test
-  $ truffle migrate --network testnet --reset
+$ truffle install
+$ truffle test
+$ truffle migrate --network testnet --reset
 Using network 'testnet'.
 
 Running migration: 1_deploy_contracts.js
@@ -43,9 +43,10 @@ Running migration: 1_deploy_contracts.js
 **UI**
 
 ```
-  $ cd web-ui
-  $ npm install
-  $ npm start
+$ cd web-ui
+$ npm install
+$ npm start
 ```
 
 You can also deploy UI to gh-pages with `npm run deploy`.
+
