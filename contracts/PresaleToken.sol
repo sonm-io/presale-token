@@ -20,12 +20,14 @@ contract PresaleToken {
      *  Constants
     /*/
 
-    string public name = "Dilation Presale Token";
-    string public symbol = "DPT";
+    string public name = "SONM Presale Token";
+    string public symbol = "SNM";
     uint   public decimals = 18;
 
     uint public PRICE = 200; // 200 DPT per Ether
-    uint public TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
+    uint public TOKEN_SUPPLY_LIMIT = 50000*10**18; //  Возможно стоит оставить так для лучшего понимания?
+    //Не знал как изменить следующую строку для 50000 eth.
+  //  uint public TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
 
 
     /*/
