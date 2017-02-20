@@ -21,10 +21,10 @@ contract PresaleToken {
     /*/
 
     string public name = "SONM Presale Token";
-    string public symbol = "SNM";
+    string public symbol = "SPT";
     uint   public decimals = 18;
 
-    uint public PRICE = 200; // 200 DPT per Ether
+    uint public PRICE = 200; // 200 SPT per Ether
 
     // 50 000 eth * 200 price
     uint public TOKEN_SUPPLY_LIMIT = 10000000 * (1 ether / 1 wei);
