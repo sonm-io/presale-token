@@ -25,14 +25,10 @@ contract PresaleToken {
     uint   public decimals = 18;
 
     uint public PRICE = 200; // 200 DPT per Ether
-<<<<<<< HEAD
+
     // 50 000 eth * 200 price
     uint public TOKEN_SUPPLY_LIMIT = 10000000 * (1 ether / 1 wei);
-=======
-    uint public TOKEN_SUPPLY_LIMIT = 50000*10**18; //  Возможно стоит оставить так для лучшего понимания?
-    //Не знал как изменить следующую строку для 50000 eth.
-  //  uint public TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
->>>>>>> 593cb151b44fb26cec166b09f76e2490baf7ddc5
+
 
 
     /*/
