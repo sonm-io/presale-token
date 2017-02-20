@@ -30,6 +30,7 @@ const API = {
         : resolve(fromWei(res)))
   ),
 
+
   checkNetwork: () => new Promise((resolve, reject) =>
     web3.version.getNetwork((err,res) => {
       if(err)
@@ -39,6 +40,7 @@ const API = {
       resolve();
     })
   ),
+
 
   getTokenInfo: tokenAddress => PresaleToken.at(tokenAddress)
     .then(token =>
@@ -64,6 +66,7 @@ const API = {
             currentPhase: phase.toNumber(),
             tokenManager: {address: mgr1},
             crowdsaleManager: {address: mgr2},
+            address: tokenAddress,
           }))
         .then(info => TokenManager.at(info.tokenManager.address)
           .then(mgr => Promise.all(
@@ -74,7 +77,24 @@ const API = {
             Object.assign(info.tokenManager, {balance, managers});
             return Promise.resolve(info);
           })))
-      )
+      ),
+
+  getEvents: info => new Promise((resolve, reject) => {
+    const t = PresaleToken.at(info.address);
+    const filter = t.allEvents({
+      fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
+      toBlock: 'latest'});
+    filter.get((err, res) => err ? reject(err) : resolve(res));
+  }),
+
+  buyTokens: (tokenAddress, value) => new Promise((resolve, reject) =>
+    web3.eth.sendTransaction(
+      { to: tokenAddress,
+        value: web3.toWei(value, "ether"),
+        gas: 500000,
+      },
+      (err, res) => err ? reject(err) : resolve(res)
+    ))
 };
 
 export default API;

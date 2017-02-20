@@ -7,6 +7,7 @@ import TextField            from 'material-ui/TextField';
 import Const                from './constants';
 import API                  from './tokenAPI';
 import TokenInfo            from './TokenInfo';
+import TokenEvents          from './TokenEvents';
 import TokenActions         from './TokenActions';
 import './App.css';
 
@@ -21,6 +22,7 @@ export default class App extends React.Component {
       tokenAddress: Const.DEFAULT_TOKEN_ADDRESS,
       tokenError: null,
       tokenInfo: null,
+      tokenEvents: null,
       defaultAccount: null,
     };
   }
@@ -61,7 +63,6 @@ export default class App extends React.Component {
 
 
 
-
   _setTokenAddress = ev => {
     this.setState(
       {tokenAddress: ev.target.value},
@@ -71,12 +72,24 @@ export default class App extends React.Component {
 
   _changeTab = tab => {
     switch(tab.props.value) {
+      case "events": {
+        API.getEvents(this.state.tokenInfo)
+          .then(tokenEvents => this.setState({tokenEvents}));
+        break;
+      }
       case "actions": {
         break;
       }
       default:
     }
   }
+
+
+  _buyTokens = value =>
+    API.buyTokens(this.state.tokenAddress, value)
+      .then(res => console.log("Buy tokens", res));
+  // FIXME: show link to transaction
+  // FIXME: refresh token info
 
 
   render() {
@@ -126,15 +139,18 @@ export default class App extends React.Component {
           { this.state.tokenInfo &&
             <Tabs>
               <Tab label="Token Info" value="info">
-                <TokenInfo info={this.state.tokenInfo}/>
+                <TokenInfo info={this.state.tokenInfo} onBuyTokens={this._buyTokens}/>
               </Tab>
-              <Tab label="Events" value="events">
-                { this.state.latestEvents
-                    ? <h2>Events</h2>
-                    : spinner
+              <Tab label="Events" value="events" onActive={this._changeTab}>
+                { this.state.tokenEvents
+                    ? <TokenEvents events={this.state.tokenEvents}/>
+                    : <div>
+                      <p>Fetching events is quite a slow operation. Please sit back and relax.</p>
+                      { spinner }
+                      </div>
                 }
               </Tab>
-              <Tab label="Actions" value="actions" onActive={this._changeTab}>
+              <Tab label="Actions" value="actions">
                 <TokenActions
                   info={this.state.tokenInfo}
                   defaultAccount={this.state.defaultAccount}
