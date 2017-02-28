@@ -11,7 +11,7 @@ Phases
 
 There are five phases:
   - **Created**. Contract is just created and investors are not yet able to
-    buy tokens. Token managers can start presale or destroy contract.
+    buy tokens. Token managers can start presale.
   - **Running**. Investors can buy tokens (until presale limit is reached).
     Token managers are able to temporarily pause presale or switch to
     migration phase.
@@ -20,8 +20,8 @@ There are five phases:
   - **Migrating**. Presale is over, investors can't buy tokens but can
     exchange their presale tokens for real tokens via the crowdsale contract.
   - **Migrated**. Presale contract automatically switches to this phase when
-    all tokes are successfully migrated. At this phase presale is totally over
-    and it is safe to destroy presale contract.
+    all tokes are successfully migrated. At this phase presale is totally
+    finished.
 
 
  Management Functions
@@ -57,9 +57,3 @@ There are five phases:
     Valid crowdsale manager address is required to switch to *Migrating*
     phase. It is not possible to change crowdsale manager address when
     migration is in progress.
-  - `tokenSelfdestruct`. This function destroys presale contract and all its
-    state. It also moves all remaining Ether from presale token account to
-    token manager's multisig account. The function can be called only in
-    *Created* phase (when presale is not happened yet) and in *Migrated* phase
-    (when presale and migration are completely finished).
- 

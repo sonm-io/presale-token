@@ -79,13 +79,61 @@ const API = {
           })))
       ),
 
-  getEvents: info => new Promise((resolve, reject) => {
-    const t = PresaleToken.at(info.address);
+  getTokenEvents: address => new Promise((resolve, reject) => {
+    const t = PresaleToken.at(address);
     const filter = t.allEvents({
       fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
       toBlock: 'latest'});
     filter.get((err, res) => err ? reject(err) : resolve(res));
   }),
+
+
+  getManagerActions: address => new Promise((resolve, reject) => {
+    const m = TokenManager.at(address);
+    const filter = m.allEvents({
+      fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
+      toBlock: 'latest'});
+    filter.get((err, events) => {
+      if(err) return reject(err);
+      const txMap = {};
+      events.forEach(e => {
+        const txId = e.args._txId === undefined ? e.args.transactionId : e.args._txId;
+        txMap[txId] || txMap[txId] = {txId};
+
+        switch(e.event) {
+          case "LogTokenSetPresalePhase": {
+            txMap[txId].action = "setPresalePhase";
+            txMap[txId].newPhase = e.args._phase;
+            break;
+          }
+          case "LogTokenWithdrawEther": {
+            txMap[txId].action = "withdrawEther";
+            break;
+          }
+          case "LogTokenSetCrowdsaleManager": {
+            txMap[txId].action = "setCrowdsaleManager";
+            txMap[txId].crowdsaleManager = e.args._address;
+            break;
+          }
+          case "LogTokenSelfdestruct": {
+            txMap[txId].action = "selfdestruct";
+            break;
+          }
+          case "Execution": {
+            txMap[txId].executed = true;
+            break;
+          }
+          case "ExecutionFailure": {
+            txMap[txId].failed = true;
+            break;
+          }
+        }
+      });
+
+      resolve(Object.values(txMap));
+  }),
+
+
 
   buyTokens: (tokenAddress, value) => new Promise((resolve, reject) =>
     web3.eth.sendTransaction(

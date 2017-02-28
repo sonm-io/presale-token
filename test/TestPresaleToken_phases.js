@@ -53,7 +53,6 @@ contract("PresaleToken", () => {
   // - burn
   // + withdraw
   // + set crowdsale manager
-  // - selfdestruct
   it("should fail to buyTokens in Phase.Created", () =>
     token.buyTokens(investor1, {value: web3.toWei(1, 'ether'), from: investor1})
       .then(assert.fail).catch(evmThrow))
@@ -75,10 +74,6 @@ contract("PresaleToken", () => {
     token.setCrowdsaleManager(crowdsaleManager, {from: investor1})
       .then(assert.fail).catch(evmThrow))
 
-  it("should fail to call selfdestruct in Phase.Created", () =>
-    token.selfdestruct({from: tokenManager})
-      .then(() => {}))
-
   it("can succesfully create another PresaleToken", () =>
     PresaleToken.new(tokenManager, {from: creator})
       .then(res => {token = res}));
@@ -94,7 +89,6 @@ contract("PresaleToken", () => {
   // - burn
   // + withdraw
   // + set crowdsale manager
-  // - selfdestruct
   it("can call buyTokens in Phase.Running", () =>
     token.buyTokens(investor1, {value: web3.toWei(1, 'ether'), from: investor1})
       .then(() => {
@@ -129,10 +123,6 @@ contract("PresaleToken", () => {
     token.setCrowdsaleManager(crowdsaleManager, {from: investor1})
       .then(assert.fail).catch(evmThrow))
 
-  it("should fail to call selfdestruct in Phase.Running", () =>
-    token.selfdestruct({from: tokenManager})
-      .then(assert.fail).catch(evmThrow))
-
   it("can call buyTokens in Phase.Running again", () =>
     token.buyTokens(investor2, {value: web3.toWei(1, 'ether'), from: investor2})
       .then(() => {
@@ -154,7 +144,6 @@ contract("PresaleToken", () => {
   // - burn
   // + withdraw
   // + set crowdsale manager
-  // - selfdestruct
   it("should fail to call buyTokens in Phase.Paused", () =>
     token.buyTokens(investor1, {value: web3.toWei(1, 'ether'), from: investor1})
       .then(assert.fail).catch(evmThrow))
@@ -176,10 +165,6 @@ contract("PresaleToken", () => {
 
   it("random guy should fail to call setCrowdsaleManager in Phase.Paused", () =>
     token.setCrowdsaleManager(crowdsaleManager, {from: investor1})
-      .then(assert.fail).catch(evmThrow))
-
-  it("should fail to call selfdestruct in Phase.Paused", () =>
-    token.selfdestruct({from: tokenManager})
       .then(assert.fail).catch(evmThrow))
 
   no(Phase.Paused, Phase.Created);
@@ -218,7 +203,6 @@ contract("PresaleToken", () => {
   // + burn
   // + withdraw
   // - set crowdsale manager
-  // - selfdestruct
   it("should fail to call buyTokens in Phase.Migrating", () =>
     token.buyTokens(investor1, {value: web3.toWei(1, 'ether'), from: investor1})
       .then(assert.fail).catch(evmThrow))
@@ -239,10 +223,6 @@ contract("PresaleToken", () => {
 
   it("should fail to call setCrowdsaleManager in Phase.Migrating", () =>
     token.setCrowdsaleManager(crowdsaleManager, {from: tokenManager})
-      .then(assert.fail).catch(evmThrow))
-
-  it("should fail to call selfdestruct in Phase.Migrating", () =>
-    token.selfdestruct({from: tokenManager})
       .then(assert.fail).catch(evmThrow))
 
   no(Phase.Migrating, Phase.Created);
@@ -274,16 +254,11 @@ contract("PresaleToken", () => {
   // At phase Migrated
   // - buy
   // + withdraw
-  // + selfdestruct
   it("should fail to call buyTokens in Phase.Migrated", () =>
     token.buyTokens(investor1, {value: web3.toWei(1, 'ether'), from: investor1})
       .then(assert.fail).catch(evmThrow))
 
   it("tokenManager can call withdrawEther in Phase.Migrated", () =>
     token.withdrawEther({from: tokenManager})
-      .then(() => {}))
-
-  it("tokenManager can call selfdestruct in Phase.Migrated", () =>
-    token.selfdestruct({from: tokenManager})
       .then(() => {}))
 })

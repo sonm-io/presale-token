@@ -50,6 +50,8 @@ export default function(props) {
       ]}
     />;
 
+  const pendingActions = [];
+
   return (
     <div>
       <Table selectable={false}>
@@ -67,14 +69,18 @@ export default function(props) {
             primaryText={man}
           />
         )}
-
-        <Subheader inset={true}>Available actions</Subheader>
         { !isManager &&
           <ListItem disabled={true}
             primaryText="You have no power here"
             secondaryText="Only presale managers can execute actions."
           />
         }
+
+        { pending.actions &&
+          <Subheader inset={true}>Pending actions</Subheader>
+        }
+
+        <Subheader inset={true}>Available actions</Subheader>
         { isManager &&
           action(
             "Start presale",

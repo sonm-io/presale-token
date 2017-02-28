@@ -161,15 +161,4 @@ contract PresaleToken {
         if(currentPhase == Phase.Migrating) throw;
         crowdsaleManager = _mgr;
     }
-
-
-    function selfdestruct() public
-        onlyTokenManager
-    {
-        // Available only if nothing hapened yet or if presale is totally
-        // completed.
-        if(currentPhase != Phase.Created && currentPhase != Phase.Migrated)
-          throw;
-        suicide(tokenManager); // send remaining funds to tokenManager
-    }
 }

@@ -73,7 +73,7 @@ export default class App extends React.Component {
   _changeTab = tab => {
     switch(tab.props.value) {
       case "events": {
-        API.getEvents(this.state.tokenInfo)
+        API.getTokenEvents(this.state.tokenInfo.address)
           .then(tokenEvents => this.setState({tokenEvents}));
         break;
       }

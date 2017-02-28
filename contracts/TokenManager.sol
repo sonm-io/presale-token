@@ -18,7 +18,6 @@ contract TokenManager is MultiSigWallet {
     event LogTokenSetPresalePhase(PresaleToken.Phase indexed _phase, uint _txId);
     event LogTokenWithdrawEther(uint _txId);
     event LogTokenSetCrowdsaleManager(address indexed _address, uint _txId);
-    event LogTokenSelfdestruct(uint _txId);
 
 
     function tokenSetPresalePhase(
@@ -58,14 +57,5 @@ contract TokenManager is MultiSigWallet {
 
         uint txId = super.submitTransaction(_token, 0, data);
         LogTokenSetCrowdsaleManager(_mgr, txId);
-    }
-
-
-    function tokenSelfdestruct(address _token) public
-        ownerExists(msg.sender)
-    {
-        bytes memory data = hex"679d38e0";
-        uint txId = super.submitTransaction(_token, 0, data);
-        LogTokenSelfdestruct(txId);
     }
 }

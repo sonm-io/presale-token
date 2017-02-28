@@ -59,6 +59,4 @@ contract("TokenManager", () => {
   // TODO:
   // - move to migration phase
   // - burn all tokens {from: c}
-  // - suicide
-
 })
