@@ -21,7 +21,6 @@ const fromWei = x => {
 
 
 const API = {
-
   getBalance: address => new Promise((resolve, reject) =>
     web3.eth.getBalance(
       address,
@@ -35,14 +34,20 @@ const API = {
     web3.version.getNetwork((err,res) => {
       if(err)
         return reject({UNKNOWN_ERROR: true, more: err});
-      if(res !== Const.EXPECTED_NETWORK_ID)
+      if(!res.match(Const.EXPECTED_NETWORK_ID))
         return reject({INVALID_NETWORK_ID: true, arg: res})
       resolve();
     })
   ),
 
 
-  getTokenInfo: tokenAddress => PresaleToken.at(tokenAddress)
+  getTokenInfo: tokenAddress => new Promise((resolve, reject) => {
+    try {
+      resolve(PresaleToken.at(tokenAddress));
+    } catch(err) {
+      reject({INVALID_TOKEN_ADDRESS: true});
+    }
+  })
     .then(token =>
       API.checkNetwork()
         .then(() => token.name.call())
@@ -83,7 +88,7 @@ const API = {
     const t = PresaleToken.at(address);
     const filter = t.allEvents({
       fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
-      toBlock: 'latest'});
+      toBlock: "latest"});
     filter.get((err, res) => err ? reject(err) : resolve(res));
   }),
 
@@ -92,13 +97,15 @@ const API = {
     const m = TokenManager.at(address);
     const filter = m.allEvents({
       fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
-      toBlock: 'latest'});
+      toBlock: "latest"
+    });
+
     filter.get((err, events) => {
       if(err) return reject(err);
       const txMap = {};
       events.forEach(e => {
         const txId = e.args._txId === undefined ? e.args.transactionId : e.args._txId;
-        txMap[txId] || txMap[txId] = {txId};
+        txMap[txId] || (txMap[txId] = {txId});
 
         switch(e.event) {
           case "LogTokenSetPresalePhase": {
@@ -115,10 +122,6 @@ const API = {
             txMap[txId].crowdsaleManager = e.args._address;
             break;
           }
-          case "LogTokenSelfdestruct": {
-            txMap[txId].action = "selfdestruct";
-            break;
-          }
           case "Execution": {
             txMap[txId].executed = true;
             break;
@@ -127,13 +130,13 @@ const API = {
             txMap[txId].failed = true;
             break;
           }
+          default: break;
         }
       });
 
       resolve(Object.values(txMap));
+    })
   }),
-
-
 
   buyTokens: (tokenAddress, value) => new Promise((resolve, reject) =>
     web3.eth.sendTransaction(
@@ -142,7 +145,9 @@ const API = {
         gas: 500000,
       },
       (err, res) => err ? reject(err) : resolve(res)
-    ))
+    )),
+
+  startPresale: () => {}
 };
 
 export default API;

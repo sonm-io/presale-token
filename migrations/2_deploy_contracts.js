@@ -22,7 +22,7 @@ module.exports = (deployer, network) => {
     team.forEach(addr => web3.eth.sendTransaction({
       from: web3.eth.accounts[9],
       to: addr,
-      value: web3.fromWei(20, 'ether')
+      value: web3.toWei(20, 'ether')
     }));
 
   }

@@ -23,7 +23,7 @@ export default class App extends React.Component {
       tokenError: null,
       tokenInfo: null,
       tokenEvents: null,
-      defaultAccount: null,
+      defaultAccount: null
     };
   }
 
@@ -31,29 +31,17 @@ export default class App extends React.Component {
   _trackAccountInterval = null;
 
   componentDidMount() {
-    if(!web3)  return;
-    this.setState({isLoading: true}, () => {
-      API.getTokenInfo(this.state.tokenAddress)
-        .then(tokenInfo => {
-          this.setState({tokenInfo, defaultAccount: web3.eth.accounts[0]});
+    if(!web3) return;
+    this._loadTokenInfo();
 
-          // track account changes
-          this._trackAccountInterval = setInterval(() => {
-            if (web3.eth.accounts[0] !== this.state.defaultAccount) {
-              this.setState({defaultAccount: web3.eth.accounts[0]})
-            }
-          }, 600);
-        })
-        .catch(err => {
-          console.log('ERROR', err);
-          this.setState({tokenError: "Unexpected error, sorry"})
-          if(err.INVALID_TOKEN_ADDRESS) {
-          } else if(err.INVALID_NETWORK_ID) {
-          } else if(err.INVALID_TOKEN_NAME) {
-          } else if(err.message) {
-          }
-        })
-    })
+    // track account changes
+    if(!this._trackAccountInterval) {
+      this._trackAccountInterval = setInterval(() => {
+        if (web3.eth.accounts[0] !== this.state.defaultAccount) {
+          this.setState({defaultAccount: web3.eth.accounts[0]})
+        }
+      }, 600);
+    }
   }
 
 
@@ -62,12 +50,23 @@ export default class App extends React.Component {
   }
 
 
-
-  _setTokenAddress = ev => {
-    this.setState(
-      {tokenAddress: ev.target.value},
-    );
-  }
+  _loadTokenInfo = () =>
+    API.getTokenInfo(this.state.tokenAddress)
+      .then(tokenInfo => this.setState({
+        tokenInfo,
+        tokenError: null,
+        defaultAccount: web3.eth.accounts[0]
+      }))
+      .catch(err => {
+        console.log('ERROR', err);
+        this.setState({tokenError: "Unexpected error, sorry"})
+        if(err.INVALID_TOKEN_ADDRESS) {
+          this.setState({tokenError: "Invalid address format"})
+        } else if(err.INVALID_NETWORK_ID) {
+        } else if(err.INVALID_TOKEN_NAME) {
+        } else if(err.message) {
+        }
+      })
 
 
   _changeTab = tab => {
@@ -115,7 +114,7 @@ export default class App extends React.Component {
             fullWidth={true}
             errorText={this.state.tokenError}
             value={this.state.tokenAddress}
-            onChange={this._setTokenAddress}
+            disabled={true}
           />
           { !window.web3 &&
             <div>

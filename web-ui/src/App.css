@@ -15,3 +15,7 @@ body {
 .App .content {
   padding: 20px 10px;
 }
+
+.App .Actions .set-cs-addr > * {
+  margin-right: 16px;
+}
