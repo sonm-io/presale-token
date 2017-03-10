@@ -8,6 +8,7 @@ const PresaleToken = Truffle(PresaleToken_json);
 const TokenManager = Truffle(TokenManager_json);
 const web3 = window.web3;
 
+
 if(web3) {
   PresaleToken.setProvider(web3.currentProvider);
   TokenManager.setProvider(web3.currentProvider);
@@ -19,6 +20,7 @@ const fromWei = x => {
   else return y;
 }
 
+const PHASE_NAME = ["Created", "Running", "Paused", "Migrating", "Migrated"];
 
 const API = {
   getBalance: address => new Promise((resolve, reject) =>
@@ -77,15 +79,16 @@ const API = {
           .then(mgr => Promise.all(
             [ API.getBalance(mgr.address)
             , mgr.getOwners.call()
+            , API.getManagerActions(mgr)
             ])
-          .then(([balance, managers]) => {
-            Object.assign(info.tokenManager, {balance, managers});
+          .then(([balance, managers, pendingActions]) => {
+            Object.assign(info.tokenManager, {balance, managers, pendingActions});
             return Promise.resolve(info);
           })))
       ),
 
   getTokenEvents: address => new Promise((resolve, reject) => {
-    const t = PresaleToken.at(address);
+    const t = TokenManager.at(address);
     const filter = t.allEvents({
       fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
       toBlock: "latest"});
@@ -93,8 +96,7 @@ const API = {
   }),
 
 
-  getManagerActions: address => new Promise((resolve, reject) => {
-    const m = TokenManager.at(address);
+  getManagerActions: m => new Promise((resolve, reject) => {
     const filter = m.allEvents({
       fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
       toBlock: "latest"
@@ -105,21 +107,28 @@ const API = {
       const txMap = {};
       events.forEach(e => {
         const txId = e.args._txId === undefined ? e.args.transactionId : e.args._txId;
-        txMap[txId] || (txMap[txId] = {txId});
+        txMap[txId] || (txMap[txId] = {txId, confirmations: []});
 
         switch(e.event) {
           case "LogTokenSetPresalePhase": {
             txMap[txId].action = "setPresalePhase";
             txMap[txId].newPhase = e.args._phase;
+            txMap[txId].name = `Switch to phase: ${PHASE_NAME[e.args._phase]}`;
             break;
           }
           case "LogTokenWithdrawEther": {
             txMap[txId].action = "withdrawEther";
+            txMap[txId].name = "Withdraw Ether to multisig";
             break;
           }
           case "LogTokenSetCrowdsaleManager": {
             txMap[txId].action = "setCrowdsaleManager";
             txMap[txId].crowdsaleManager = e.args._address;
+            txMap[txId].name = `Set crowdsale address to ${e.args._address}`;
+            break;
+          }
+          case "Confirmation": {
+            txMap[txId].confirmations.push(e.args.sender);
             break;
           }
           case "Execution": {
@@ -134,7 +143,7 @@ const API = {
         }
       });
 
-      resolve(Object.values(txMap));
+      resolve(Object.values(txMap).filter(tx => !tx.executed && !tx.failed));
     })
   }),
 
@@ -147,7 +156,31 @@ const API = {
       (err, res) => err ? reject(err) : resolve(res)
     )),
 
-  startPresale: () => {}
+  setPhase: (tokenAddr, phase, mgrAddr) => {
+    const m = TokenManager.at(mgrAddr);
+    return m.tokenSetPresalePhase(
+      tokenAddr, phase,
+      {gas: 500000, from: web3.eth.accounts[0]}
+    );
+  },
+
+  withdrawEther: (tokenAddr, mgrAddr) => {
+    const m = TokenManager.at(mgrAddr);
+    return m.tokenWithdrawEther(
+      tokenAddr,
+      {gas: 500000, from: web3.eth.accounts[0]}
+    );
+  },
+
+  confirmTransaction: (txId, mgrAddr) => {
+    const m = TokenManager.at(mgrAddr);
+    return m.confirmTransaction(
+      txId,
+      {gas: 500000, from: web3.eth.accounts[0]}
+    );
+  },
+
+
 };
 
 export default API;

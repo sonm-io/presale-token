@@ -10,6 +10,7 @@ const Dev = {
   DEPLOYMENT_BLOCK_NUMBER: 1
 };
 
+/*
 const Ropsten = {
   EXPECTED_NETWORK_ID: "3",
   EXPECTED_NETWORK_NAME: "Ropsten",
@@ -25,5 +26,6 @@ const Mainnet = {
   EXPECTED_TOKEN_NAME: "SONM Presale Token",
   DEPLOYMENT_BLOCK_NUMBER: 539213
 };
+*/
 
 export default Dev;

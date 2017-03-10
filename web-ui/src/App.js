@@ -3,6 +3,8 @@ import MuiThemeProvider     from 'material-ui/styles/MuiThemeProvider';
 import CircularProgress     from 'material-ui/CircularProgress';
 import {Tabs, Tab}          from 'material-ui/Tabs';
 import TextField            from 'material-ui/TextField';
+import Dialog               from 'material-ui/Dialog';
+import FlatButton           from 'material-ui/FlatButton';
 
 import Const                from './constants';
 import API                  from './tokenAPI';
@@ -23,7 +25,8 @@ export default class App extends React.Component {
       tokenError: null,
       tokenInfo: null,
       tokenEvents: null,
-      defaultAccount: null
+      defaultAccount: null,
+      isDialogOpen: false
     };
   }
 
@@ -38,7 +41,8 @@ export default class App extends React.Component {
     if(!this._trackAccountInterval) {
       this._trackAccountInterval = setInterval(() => {
         if (web3.eth.accounts[0] !== this.state.defaultAccount) {
-          this.setState({defaultAccount: web3.eth.accounts[0]})
+          web3.eth.defaultAccount = web3.eth.accounts[0];
+          this.setState({defaultAccount: web3.eth.accounts[0]});
         }
       }, 600);
     }
@@ -72,23 +76,53 @@ export default class App extends React.Component {
   _changeTab = tab => {
     switch(tab.props.value) {
       case "events": {
-        API.getTokenEvents(this.state.tokenInfo.address)
+        API.getTokenEvents(this.state.tokenInfo.tokenManager.address)
           .then(tokenEvents => this.setState({tokenEvents}));
         break;
       }
-      case "actions": {
-        break;
-      }
-      default:
+      default: break;
     }
   }
 
 
+  _closeDialog = () => this.setState({isDialogOpen: false}, this._loadTokenInfo)
+
+
+  _notifyTransaction = res => {
+    const txUrl = "https://testnet.etherscan.io/tx/" + res.tx;
+    this.setState({
+      isDialogOpen: true,
+      dialogTitle: "Transaction submitted",
+      dialogText: <p>
+        You can see submitted transaction here <a href={txUrl}>here</a>.
+        Please wait while it is mined and refresh the page.
+      </p>
+    })
+  }
+
+
+  _onActionSetPhase = newPhase => {
+    const {tokenInfo} = this.state;
+    API.setPhase(tokenInfo.address, newPhase, tokenInfo.tokenManager.address)
+      .then(this._notifyTransaction)
+  }
+
+
+  _onActionWithdraw = () => {
+    const {tokenInfo} = this.state;
+    API.withdrawEther(tokenInfo.address, tokenInfo.tokenManager.address)
+      .then(this._notifyTransaction)
+  }
+
+  _onActionConfirmTx = tx => {
+    const {tokenInfo} = this.state;
+    API.confirmTransaction(tx, tokenInfo.tokenManager.address)
+      .then(this._notifyTransaction)
+  }
+
   _buyTokens = value =>
     API.buyTokens(this.state.tokenAddress, value)
-      .then(res => console.log("Buy tokens", res));
-  // FIXME: show link to transaction
-  // FIXME: refresh token info
+      .then(this._notifyTransaction)
 
 
   render() {
@@ -153,10 +187,25 @@ export default class App extends React.Component {
                 <TokenActions
                   info={this.state.tokenInfo}
                   defaultAccount={this.state.defaultAccount}
+                  onSetPhase={this._onActionSetPhase}
+                  onWithdraw={this._onActionWithdraw}
+                  onConfirmTx={this._onActionConfirmTx}
                 />
               </Tab>
             </Tabs>
           }
+          <Dialog
+            open={this.state.isDialogOpen}
+            onRequestClose={this._closeDialog}
+            title={this.state.dialogTitle}
+            actions={[
+              <FlatButton label="Close" primary={true} keyboardFocused={true}
+                onTouchTap={this._closeDialog}
+              />
+            ]}
+          >
+           {this.state.dialogText}
+          </Dialog>
         </div>
       </MuiThemeProvider>
     );
