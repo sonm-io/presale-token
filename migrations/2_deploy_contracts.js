@@ -33,6 +33,13 @@ module.exports = (deployer, network) => {
       , "0x00b7151a4C21E5B09543c070a45Df19873A67A45" // Serguey
       ];
   }
+  else if (network === "kovan") {
+    team =
+      [ "0x980ee67ea21bc8b6c1aaaf9b57c9166052575213"
+      , "0x587d96cb98d8e628af7af908f331990e5660df72"
+      , "0x7f3307d6e3856ef6991157b5056f9de5e043c75c"
+      ];
+  }
   else if (network === "mainnet") {
     // FIXME: add dev team mainnet addresses
   }

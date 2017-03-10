@@ -152,7 +152,7 @@ export default function(props) {
                 </div>)
             }
             { (info.currentPhase === 1 || info.currentPhase === 2) &&
-              info.crowdsaleManager.address &&
+              info.crowdsaleManager.address !== "0x0000000000000000000000000000000000000000" &&
               action(
                 "Start token migration",
                 "Token migration is controlled by crowdsale manager.",
