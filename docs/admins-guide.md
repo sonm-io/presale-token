@@ -1,4 +1,4 @@
-During its lifetime presale contract passes through several *phases*. Each
+During its lifetime, presale contract passes through several *phases*. Each
 phase determines which functions can be called on the contract. Token managers
 are able to switch phases according to rules described below.
 
@@ -85,11 +85,11 @@ to interact with it: https://wallet.gnosis.pm.
 The deployed `TokenManager` contracts are configured each with 3 manager
 addresses and require 2 confirmations to run transactions:
 
-  - Ropsten
+  - Manager addresses on Ropsten
     -  [0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8](https://testnet.etherscan.io/address/0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8)
     - [0xC6dD8CAC3709A46Fcfb62F8e8639985864d339d8](https://testnet.etherscan.io/address/0xC6dD8CAC3709A46Fcfb62F8e8639985864d339d8)
     - [0x00b7151a4C21E5B09543c070a45Df19873A67A45](https://testnet.etherscan.io/address/0x00b7151a4C21E5B09543c070a45Df19873A67A45)
-  - Kovan
+  - Manager addresses on Kovan
     - [0x980ee67ea21bc8b6c1aaaf9b57c9166052575213](https://kovan.etherscan.io/address/0x980ee67ea21bc8b6c1aaaf9b57c9166052575213)
       - Private Key: `f099584c9fa50e8367b9dd9cb2a7c40cda9d8883b9571c1122cb43bdb7530013`
     - [0x587d96cb98d8e628af7af908f331990e5660df72](https://kovan.etherscan.io/address/0x587d96cb98d8e628af7af908f331990e5660df72)
@@ -130,6 +130,4 @@ enabled. You can switch to "Token Info" and see "Buy tokens" button.
 
 ![Buy tokens](buy_tokens.png)
 
-Other actions like pause / resume / withdraw can be eecuted in the same way.
-
-
+Other actions like pause / resume / withdraw can be executed in the same way.
