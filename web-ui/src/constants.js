@@ -3,7 +3,7 @@
 export default {
   "*": {
     NETWORK_NAME: "testrpc",
-    TOKEN_ADDRESS: "0x6b1fbed2283243be593b6a4012b70cecb0eadef3",
+    TOKEN_ADDRESS: "0x2e3f1ea34938c3262578dff85d5061d3eb651b4a",
     // check if this is our token
     EXPECTED_TOKEN_NAME: "SONM Presale Token",
     // Block number when token was deployed (this is used to filter events).

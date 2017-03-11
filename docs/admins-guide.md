@@ -62,8 +62,10 @@ Contracts
 ---------
 There are two contracts involved in presale process:
 
-  - `PresaleToken`: holds registry of investors and their token balances, also acts as a temporary storage for gathered ETH.
-  - `TokenManager`:  standard multisig wallet with extra functions to control presale process.
+  - `PresaleToken`: holds registry of investors and their token balances,
+    also acts as a temporary storage for gathered ETH.
+  - `TokenManager`:  standard multisig wallet with extra functions to control
+    presale process.
 
 For testing purposes those contracts are deployed on test networks:
 
@@ -74,9 +76,14 @@ For testing purposes those contracts are deployed on test networks:
     - PresaleToken: [0x3000162dccb71e830cb1c2c6ed116b12aa4d9355](https://kovan.etherscan.io/address/0x3000162dccb71e830cb1c2c6ed116b12aa4d9355)
     - TokenManager: [0xacd96b2cd2c00f5d67baca0d2b7e094ee945c7a3](https://kovan.etherscan.io/address/0xacd96b2cd2c00f5d67baca0d2b7e094ee945c7a3)
 
-`TokenManager` contract implementation is based on the [multisig wallet by Gnosis](https://blog.gnosis.pm/release-of-new-multisig-wallet-59b6811f7edc), it is used to collectively manage ETH funds and allows withdrawals, adding/removing owners, and sending custom transactions. There is web-based UI to interact with it: https://wallet.gnosis.pm.
+`TokenManager` contract implementation is based on the [multisig wallet by
+Gnosis](https://blog.gnosis.pm/release-of-new-multisig-wallet-59b6811f7edc),
+it is used to collectively manage ETH funds and allows withdrawals,
+adding/removing owners, and sending custom transactions. There is web-based UI
+to interact with it: https://wallet.gnosis.pm.
 
-The deployed `TokenManager` contracts are configured each with 3 manager addresses and require 2 confirmations to run each transaction:
+The deployed `TokenManager` contracts are configured each with 3 manager
+addresses and require 2 confirmations to run transactions:
 
   - Ropsten
     -  [0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8](https://testnet.etherscan.io/address/0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8)
@@ -92,5 +99,37 @@ The deployed `TokenManager` contracts are configured each with 3 manager address
 
 All those addresses are preloaded with some ether for testing purposes.
 
-`TokenManager` contract adds three new functions to the multisig. Those functions allow to withdraw ETH funds from `PresaleToken`, switch presale phase, and set crowdsale contract address.
-There is example web-based UI to simplify executing administrative functions: https://sonm-io.github.io/token.
+
+Presale Administration
+----------------------
+
+`TokenManager` contract adds three new functions to the multisig. Those
+functions allow to withdraw ETH funds from the `PresaleToken`, switch presale
+phase, and set crowdsale contract address. There is web-based UI to simplify
+executing administrative functions: https://sonm-io.github.io/token. In the
+following we will see how to use it.
+
+By default, `PresaleToken` conrtact does not allow to buy tokens. Presale team
+can enable buying by switching `PresaleToken` to "Running" phase.
+
+On the "Actions" tab you can see "Available actions" section. (If this is not
+the case, select registered multisig account in your Web3 provider and refresh).
+
+![Available actions](available_actions.png)
+
+Press "Start Presale" button, confirm transaction, then wait for the
+transaction to be mined, and refresh the page (if required). Now you will see
+new action in "Pending actions" section.
+
+Anoter member of the team can see pending action and confirm it.
+
+![Pending action](pending_action.png)
+
+After two confirmations the action will be executed and token buying will be
+enabled. You can switch to "Token Info" and see "Buy tokens" button.
+
+![Buy tokens](buy_tokens.png)
+
+Other actions like pause / resume / withdraw can be eecuted in the same way.
+
+

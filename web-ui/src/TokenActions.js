@@ -73,7 +73,7 @@ export default function(props) {
             primaryText={man}
           />
         )}
-        { info.tokenManager.pendingActions &&
+        { info.tokenManager.pendingActions.length > 0 &&
           <div>
             <Subheader inset={true}>Pending actions</Subheader>
             {info.tokenManager.pendingActions.map((act, i) =>

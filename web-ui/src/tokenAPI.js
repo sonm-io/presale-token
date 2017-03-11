@@ -41,7 +41,7 @@ const API = {
     web3.version.getNetwork((err,res) => {
       if(err)
         return reject({UNKNOWN_ERROR: true, more: err});
-      net = res;
+      net = res in Const ? res : "*";
       resolve({
         tokenAddress: Const[net].TOKEN_ADDRESS,
         networkName: Const[net].NETWORK_NAME
