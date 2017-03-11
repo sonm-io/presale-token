@@ -68,18 +68,18 @@ There are two contracts involved in presale process:
 For testing purposes those contracts are deployed on test networks:
 
   - Ropsten:
-	  - PresaleToken: [0x5e27967f8fb05ec1a76ed1ecb0b57cced6f2cba8](https://testnet.etherscan.io/address/0x5e27967f8fb05ec1a76ed1ecb0b57cced6f2cba8)
-	  - TokenManager: [0xe51fc42848679fb21b7adfea4d5162b4f6fd3878](https://testnet.etherscan.io/address/0xe51fc42848679fb21b7adfea4d5162b4f6fd3878)
+    - PresaleToken: [0x5e27967f8fb05ec1a76ed1ecb0b57cced6f2cba8](https://testnet.etherscan.io/address/0x5e27967f8fb05ec1a76ed1ecb0b57cced6f2cba8)
+    - TokenManager: [0xe51fc42848679fb21b7adfea4d5162b4f6fd3878](https://testnet.etherscan.io/address/0xe51fc42848679fb21b7adfea4d5162b4f6fd3878)
   - Kovan:
-	  - PresaleToken: [0x3000162dccb71e830cb1c2c6ed116b12aa4d9355](https://kovan.etherscan.io/address/0x3000162dccb71e830cb1c2c6ed116b12aa4d9355)
-	  - TokenManager: [0xacd96b2cd2c00f5d67baca0d2b7e094ee945c7a3](https://kovan.etherscan.io/address/0xacd96b2cd2c00f5d67baca0d2b7e094ee945c7a3)
+    - PresaleToken: [0x3000162dccb71e830cb1c2c6ed116b12aa4d9355](https://kovan.etherscan.io/address/0x3000162dccb71e830cb1c2c6ed116b12aa4d9355)
+    - TokenManager: [0xacd96b2cd2c00f5d67baca0d2b7e094ee945c7a3](https://kovan.etherscan.io/address/0xacd96b2cd2c00f5d67baca0d2b7e094ee945c7a3)
 
 `TokenManager` contract implementation is based on the [multisig wallet by Gnosis](https://blog.gnosis.pm/release-of-new-multisig-wallet-59b6811f7edc), it is used to collectively manage ETH funds and allows withdrawals, adding/removing owners, and sending custom transactions. There is web-based UI to interact with it: https://wallet.gnosis.pm.
 
 The deployed `TokenManager` contracts are configured each with 3 manager addresses and require 2 confirmations to run each transaction:
 
   - Ropsten
-	  -  [0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8](https://testnet.etherscan.io/address/0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8)
+    -  [0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8](https://testnet.etherscan.io/address/0xFB4083E4B305D1de4b6cd61AA29454f7AD1fE7b8)
     - [0xC6dD8CAC3709A46Fcfb62F8e8639985864d339d8](https://testnet.etherscan.io/address/0xC6dD8CAC3709A46Fcfb62F8e8639985864d339d8)
     - [0x00b7151a4C21E5B09543c070a45Df19873A67A45](https://testnet.etherscan.io/address/0x00b7151a4C21E5B09543c070a45Df19873A67A45)
   - Kovan
