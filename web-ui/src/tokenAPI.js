@@ -21,6 +21,11 @@ const fromWei = x => {
 }
 
 const PHASE_NAME = ["Created", "Running", "Paused", "Migrating", "Migrated"];
+let net;
+
+
+// TODO:
+//  - check if networkId changed
 
 const API = {
   getBalance: address => new Promise((resolve, reject) =>
@@ -36,9 +41,11 @@ const API = {
     web3.version.getNetwork((err,res) => {
       if(err)
         return reject({UNKNOWN_ERROR: true, more: err});
-      if(!res.match(Const.EXPECTED_NETWORK_ID))
-        return reject({INVALID_NETWORK_ID: true, arg: res})
-      resolve();
+      net = res;
+      resolve({
+        tokenAddress: Const[net].TOKEN_ADDRESS,
+        networkName: Const[net].NETWORK_NAME
+      });
     })
   ),
 
@@ -51,9 +58,8 @@ const API = {
     }
   })
     .then(token =>
-      API.checkNetwork()
-        .then(() => token.name.call())
-        .then(name => name === Const.EXPECTED_TOKEN_NAME
+      token.name.call()
+        .then(name => name === Const[net].EXPECTED_TOKEN_NAME
             ? Promise.resolve(name)
             : Promise.reject({INVALID_TOKEN_NAME: true, arg: name}))
         .then(name => Promise.all(
@@ -90,7 +96,7 @@ const API = {
   getTokenEvents: address => new Promise((resolve, reject) => {
     const t = TokenManager.at(address);
     const filter = t.allEvents({
-      fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
+      fromBlock: Const[net].DEPLOYMENT_BLOCK_NUMBER,
       toBlock: "latest"});
     filter.get((err, res) => err ? reject(err) : resolve(res));
   }),
@@ -98,7 +104,7 @@ const API = {
 
   getManagerActions: m => new Promise((resolve, reject) => {
     const filter = m.allEvents({
-      fromBlock: Const.DEPLOYMENT_BLOCK_NUMBER,
+      fromBlock: Const[net].DEPLOYMENT_BLOCK_NUMBER,
       toBlock: "latest"
     });
 

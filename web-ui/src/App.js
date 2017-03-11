@@ -5,8 +5,8 @@ import {Tabs, Tab}          from 'material-ui/Tabs';
 import TextField            from 'material-ui/TextField';
 import Dialog               from 'material-ui/Dialog';
 import FlatButton           from 'material-ui/FlatButton';
+import {green500}           from 'material-ui/styles/colors';
 
-import Const                from './constants';
 import API                  from './tokenAPI';
 import TokenInfo            from './TokenInfo';
 import TokenEvents          from './TokenEvents';
@@ -21,8 +21,8 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      tokenAddress: Const.DEFAULT_TOKEN_ADDRESS,
-      tokenError: null,
+      tokenAddress: '',
+      tokenMsg: null,
       tokenInfo: null,
       tokenEvents: null,
       defaultAccount: null,
@@ -35,17 +35,22 @@ export default class App extends React.Component {
 
   componentDidMount() {
     if(!web3) return;
-    this._loadTokenInfo();
+    API.checkNetwork().then(res => {
+      this.setState(
+        { tokenAddress: res.tokenAddress,
+          tokenMsg: {text: res.networkName, ok: true}
+        },
+        this._loadTokenInfo
+      );
 
-    // track account changes
-    if(!this._trackAccountInterval) {
+      // track account changes
       this._trackAccountInterval = setInterval(() => {
         if (web3.eth.accounts[0] !== this.state.defaultAccount) {
           web3.eth.defaultAccount = web3.eth.accounts[0];
           this.setState({defaultAccount: web3.eth.accounts[0]});
         }
       }, 600);
-    }
+    })
   }
 
 
@@ -58,15 +63,13 @@ export default class App extends React.Component {
     API.getTokenInfo(this.state.tokenAddress)
       .then(tokenInfo => this.setState({
         tokenInfo,
-        tokenError: null,
         defaultAccount: web3.eth.accounts[0]
       }))
       .catch(err => {
         console.log('ERROR', err);
-        this.setState({tokenError: "Unexpected error, sorry"})
+        this.setState({tokenMsg: {text: "Unexpected error, sorry"}})
         if(err.INVALID_TOKEN_ADDRESS) {
-          this.setState({tokenError: "Invalid address format"})
-        } else if(err.INVALID_NETWORK_ID) {
+          this.setState({tokenMsg: {text: "Invalid address format"}})
         } else if(err.INVALID_TOKEN_NAME) {
         } else if(err.message) {
         }
@@ -126,48 +129,27 @@ export default class App extends React.Component {
 
 
   render() {
+    if(!window.web3) {
+      return <div className="App"><NoWeb3Notification/></div>;
+    }
+
     const spinner = (
       <CircularProgress
          size={80} thickness={5}
          style={{display: 'block', margin: '20px auto'}}
       />);
 
-    const addressStyle = {
-      textAlign: 'center',
-      fontSize: '20px',
-      color: 'grey'
-    };
+    const state = this.state;
 
     return (
       <MuiThemeProvider>
         <div className="App">
-          <TextField
-            hintText="Token address"
-            style={{margin: '20px 0'}}
-            inputStyle={addressStyle}
-            fullWidth={true}
-            errorText={this.state.tokenError}
-            value={this.state.tokenAddress}
-            disabled={true}
+          <TokenAddress
+            tokenAddress={state.tokenAddress}
+            tokenMsg={state.tokenMsg}
           />
-          { !window.web3 &&
-            <div>
-              <p>
-                No Ethereum network provider is detected.
-                There are several ways to fix this:
-              </p>
-              <ul>
-                <li>install <a href="https://metamask.io">MetaMask</a> browser plugin</li>
-                <li>install <a href="https://github.com/ethcore/parity-extension">Parity</a> browser plugin</li>
-                <li>open this page in <a href="https://github.com/ethereum/mist/releases">Mist</a> browser</li>
-              </ul>
-              <p>
-                More info on this project is on <a href="https://github.com/sonm-io/token">github</a>
-              </p>
-            </div>
-          }
           { // address is not validated yet
-            window.web3 && !this.state.tokenInfo && !this.state.tokenError && spinner
+            window.web3 && !this.state.tokenInfo && !this.state.tokenMsg && spinner
           }
           { this.state.tokenInfo &&
             <Tabs>
@@ -204,10 +186,51 @@ export default class App extends React.Component {
               />
             ]}
           >
-           {this.state.dialogText}
+           { this.state.dialogText }
           </Dialog>
         </div>
       </MuiThemeProvider>
     );
   }
 }
+
+const TokenAddress = props => {
+  const {tokenAddress, tokenMsg} = props;
+  const addressStyle = {
+    textAlign: 'center',
+    fontSize: '20px',
+    color: 'grey'
+  };
+  const errorStyle = props.tokenMsg && props.tokenMsg.ok
+    ? { color: green500 }
+    : {};
+
+  return (
+    <TextField
+      hintText="Token address"
+      style={{margin: '20px 0'}}
+      fullWidth={true}
+      disabled={true}
+      inputStyle={addressStyle}
+      errorStyle={errorStyle}
+      errorText={tokenMsg && tokenMsg.text}
+      value={tokenAddress}
+    />
+  );
+};
+
+const NoWeb3Notification = () =>
+  <div>
+    <p>
+      No Ethereum network provider is detected.
+      There are several ways to fix this:
+    </p>
+    <ul>
+      <li>install <a href="https://metamask.io">MetaMask</a> browser plugin</li>
+      <li>install <a href="https://github.com/ethcore/parity-extension">Parity</a> browser plugin</li>
+      <li>open this page in <a href="https://github.com/ethereum/mist/releases">Mist</a> browser</li>
+    </ul>
+    <p>
+      Find more info on this project on <a href="https://github.com/sonm-io/token">github</a>.
+    </p>
+  </div>;
