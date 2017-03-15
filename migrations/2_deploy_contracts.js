@@ -32,6 +32,9 @@ module.exports = (deployer, network) => {
       , "0xC6dD8CAC3709A46Fcfb62F8e8639985864d339d8" // Krzysztof
       , "0x00b7151a4C21E5B09543c070a45Df19873A67A45" // Serguey
       ];
+      
+
+
   }
   else if (network === "kovan") {
     team =

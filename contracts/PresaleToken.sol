@@ -26,8 +26,8 @@ contract PresaleToken {
 
     uint public PRICE = 200; // 200 SPT per Ether
 
-    // 50 000 eth * 200 price
-    uint public TOKEN_SUPPLY_LIMIT = 10000000 * (1 ether / 1 wei);
+    //  price
+    uint public TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
 
 
 

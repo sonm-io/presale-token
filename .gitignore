@@ -2,8 +2,10 @@
 # truffle
 /build
 
+
 # ethpm
 /installed_contracts
+secrets.json
 
 # npm
 node_modules
