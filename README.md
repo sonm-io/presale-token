@@ -7,7 +7,7 @@ Presale tokens (SPT). Please check that you are understande major features
 before investing or interacting with these contracts:
 
   - tokens are provided at fixed price 200 SPT per 1 ETH;
-  - maximum amount of tokens distributed during presale is limited to 10.000.000 DPT;
+  - maximum amount of tokens distributed during presale is limited to 4.000.000 SPT;
   - dev team is able to stop presale at any time;
   - you can not transfer SPT tokens during presale;
   - you will be able to exchange SPT tokens for real SONM tokens at a later
@@ -49,4 +49,3 @@ $ npm start
 ```
 
 You can also deploy UI to gh-pages with `npm run deploy`.
-
