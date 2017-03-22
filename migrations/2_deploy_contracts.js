@@ -32,8 +32,6 @@ module.exports = (deployer, network) => {
       , "0xC6dD8CAC3709A46Fcfb62F8e8639985864d339d8" // Krzysztof
       , "0x00b7151a4C21E5B09543c070a45Df19873A67A45" // Serguey
       ];
-      
-
 
   }
   else if (network === "kovan") {
@@ -44,10 +42,16 @@ module.exports = (deployer, network) => {
       ];
   }
   else if (network === "mainnet") {
-    // FIXME: add dev team mainnet addresses
+    team =
+      [ "0xe93615b1c3709C5A5f0BBF89fD33C8efFFd88516" // Andrew
+      , "0x88ab8f62d8Aa7F7f94a5b014e415133037c2098D" // Krzysztof
+      , "0xCc14D25Fae961Ced09709BE04bf13c28Db3FF81b" // Alexey
+      , "                                          " // Serguey
+      ];
   }
+  const requiredConfirmations = network === "mainnet" ? 4 : 2;
 
-  deployer.deploy(TokenManager, team, 2)
+  deployer.deploy(TokenManager, team, requiredConfirmations)
     .then(TokenManager.deployed)
     .then(tokenMgr => deployer.deploy(PresaleToken, tokenMgr.address));
 };
