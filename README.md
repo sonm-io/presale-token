@@ -2,8 +2,8 @@
 SONM Presale Contracts
 ======================
 
-These smart contracts are designed to handle initial distribution of Sonm
-Presale tokens (SPT). Please check that you are understande major features
+These smart contracts are designed to handle initial distribution of SONM
+Presale Tokens (SPT). Please check that you are understande major features
 before investing or interacting with these contracts:
 
   - tokens are provided at fixed price 200 SPT per 1 ETH;
@@ -16,7 +16,7 @@ before investing or interacting with these contracts:
   - dev team is able to withdraw Ether at any time during or after presale.
 
 
-Refer to [Investor's Guide]() or [Administrator's Guide](docs/admins-guide.md)
+Refer to [Administrator's Guide](docs/admins-guide.md)
 for more details on how to interact with the contracts.
 
 
