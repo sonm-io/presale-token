@@ -46,7 +46,7 @@ module.exports = (deployer, network) => {
       [ "0xe93615b1c3709C5A5f0BBF89fD33C8efFFd88516" // Andrew
       , "0x88ab8f62d8Aa7F7f94a5b014e415133037c2098D" // Krzysztof
       , "0xCc14D25Fae961Ced09709BE04bf13c28Db3FF81b" // Alexey
-      , "                                          " // Serguey
+      , "0xf9AE3E50B994Fa6914757958D65Ad1B3547fBe82" // Serguey
       ];
   }
   const requiredConfirmations = network === "mainnet" ? 4 : 2;
