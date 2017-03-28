@@ -28,6 +28,7 @@ contract PresaleToken {
 
     //  price
     // Cup is 10 000 ETH
+    // 1 eth = 606 presale tokens
     // ETH price ~50$ for 28.03.2017
     // Cup in $ is ~ 500 000$
     
