@@ -27,7 +27,11 @@ contract PresaleToken {
     uint public PRICE = 200; // 200 SPT per Ether
 
     //  price
-    uint public TOKEN_SUPPLY_LIMIT = 4000000 * (1 ether / 1 wei);
+    // Cup is 10 000 ETH
+    // ETH price ~50$ for 28.03.2017
+    // Cup in $ is ~ 500 000$
+    
+    uint public TOKEN_SUPPLY_LIMIT = 6060000 * (1 ether / 1 wei);
 
 
 
