@@ -31,7 +31,7 @@ contract PresaleToken {
     // 1 eth = 606 presale tokens
     // ETH price ~50$ for 28.03.2017
     // Cup in $ is ~ 500 000$
-    
+
     uint public TOKEN_SUPPLY_LIMIT = 6060000 * (1 ether / 1 wei);
 
 
@@ -54,6 +54,11 @@ contract PresaleToken {
     // Token manager has exclusive priveleges to call administrative
     // functions on this contract.
     address public tokenManager;
+
+    //Escrow
+    //escrow from bitcoin talk for presale. (SebastianJU)
+    address public escrowManager;
+  escrowManager ='0x949341CF3BCA839D21Ee3f15eDCE57280d0133D5';
     // Crowdsale manager has exclusive priveleges to burn presale tokens.
     address public crowdsaleManager;
 
@@ -154,7 +159,7 @@ contract PresaleToken {
     {
         // Available at any phase.
         if(this.balance > 0) {
-            if(!tokenManager.send(this.balance)) throw;
+            if(!escrowManager.send(this.balance)) throw;
         }
     }
 
