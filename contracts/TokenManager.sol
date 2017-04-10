@@ -1,6 +1,7 @@
 pragma solidity ^0.4.4;
 
 import "multisig-wallet/MultiSigWallet.sol";
+//import "./MultiSigWallet.sol";
 import "./PresaleToken.sol";
 
 

@@ -13,6 +13,7 @@ contract PresaleToken {
     /// @param _tokenManager Token manager address.
     function PresaleToken(address _tokenManager) {
         tokenManager = _tokenManager;
+        escrowManager ='0x949341CF3BCA839D21Ee3f15eDCE57280d0133D5';
     }
 
 
@@ -58,7 +59,7 @@ contract PresaleToken {
     //Escrow
     //escrow from bitcoin talk for presale. (SebastianJU)
     address public escrowManager;
-  escrowManager ='0x949341CF3BCA839D21Ee3f15eDCE57280d0133D5';
+
     // Crowdsale manager has exclusive priveleges to burn presale tokens.
     address public crowdsaleManager;
 
