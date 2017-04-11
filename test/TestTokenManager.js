@@ -3,6 +3,7 @@ const PresaleToken = artifacts.require("./PresaleToken.sol");
 
 contract("TokenManager", () => {
   const [a, b, c] = web3.eth.accounts;
+  const escrow = "0x0303030303030303030303030303030303030303";
   let manager;
   let token;
 
@@ -15,7 +16,7 @@ contract("TokenManager", () => {
   )
 
   it("should be able to create PresaleToken with specified manager", () =>
-    PresaleToken.new(manager.address).then(tok => token = tok)
+    PresaleToken.new(manager.address, escrow).then(tok => token = tok)
   )
 
   it("should be able to switch presale phase", () =>
@@ -42,16 +43,16 @@ contract("TokenManager", () => {
   it("should be able to withdraw funds", () =>
     token.buyTokens(a, {value: 3})
       .then(() => {
-        const balance = web3.eth.getBalance(manager.address);
-        return assert.equal(0, balance.toFixed(), "token manager has no ether initially");
+        const balance = web3.eth.getBalance(escrow);
+        return assert.equal(0, balance.toFixed(), "escrow has no ether initially");
       })
       .then(() => manager.tokenWithdrawEther(token.address))
       .then(res => {
         const log = res.logs.find(log => log.event == "LogTokenWithdrawEther");
         const txId = log.args._txId;
         return manager.confirmTransaction(txId, {from: b}).then(res => {
-          const balance = web3.eth.getBalance(manager.address);
-          return assert.isAbove(balance.toFixed(), 0, "token manager got some ether");
+          const balance = web3.eth.getBalance(escrow);
+          return assert.isAbove(balance.toFixed(), 0, "escrow got some ether");
         })
       })
   )

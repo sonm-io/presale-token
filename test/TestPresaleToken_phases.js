@@ -20,6 +20,7 @@ contract("PresaleToken", () => {
     , investor2
     , creator
     ] = web3.eth.accounts;
+  const escrow = "0x0303030303030303030303030303030303030303";
   let token = null;
 
   const evmThrow = err =>
@@ -40,7 +41,7 @@ contract("PresaleToken", () => {
             assert.equal(from, res.toFixed(), `not Phase.${PhaseStr[from]}`))));
 
   it("can succesfully create PresaleToken", () =>
-    PresaleToken.new(tokenManager, {from: creator})
+    PresaleToken.new(tokenManager, escrow, {from: creator})
       .then(res => {token = res}));
 
   it("should start in phase Created", () =>
@@ -75,7 +76,7 @@ contract("PresaleToken", () => {
       .then(assert.fail).catch(evmThrow))
 
   it("can succesfully create another PresaleToken", () =>
-    PresaleToken.new(tokenManager, {from: creator})
+    PresaleToken.new(tokenManager, escrow, {from: creator})
       .then(res => {token = res}));
 
   no(Phase.Created, Phase.Created);
@@ -93,8 +94,8 @@ contract("PresaleToken", () => {
     token.buyTokens(investor1, {value: web3.toWei(1, 'ether'), from: investor1})
       .then(() => {
         token.balanceOf.call(investor1).then(res =>
-          assert.equal(200, web3.fromWei(res.toFixed(), 'ether'),
-            "1 Ether should buy 200 DPT"))
+          assert.equal(606, web3.fromWei(res.toFixed(), 'ether'),
+            "1 Ether should buy 606 SPT"))
         const balance = web3.eth.getBalance(token.address)
         return assert.equal(1, web3.fromWei(balance.toFixed(), 'ether'), "contract balance is 1 ether")
       }))
@@ -104,13 +105,13 @@ contract("PresaleToken", () => {
       .then(assert.fail).catch(evmThrow))
 
   it("tokenManager can call withdrawEther in Phase.Running", () => {
-    const mgrBalance1 = web3.eth.getBalance(tokenManager).toFixed();
+    const mgrBalance1 = web3.eth.getBalance(escrow).toFixed();
     token.withdrawEther({from: tokenManager})
       .then(() => {
         const tokBalance = web3.fromWei(web3.eth.getBalance(token.address).toFixed(), 'ether');
         assert.equal(0, tokBalance, "contract balance is 0 ether");
-        const mgrBalance2 = web3.eth.getBalance(tokenManager).toFixed();
-        return assert.isAbove(mgrBalance2, mgrBalance1, "token manager got some ether");
+        const mgrBalance2 = web3.eth.getBalance(escrow).toFixed();
+        return assert.isAbove(mgrBalance2, mgrBalance1, "escrow got some ether");
       })
   });
 
@@ -127,8 +128,8 @@ contract("PresaleToken", () => {
     token.buyTokens(investor2, {value: web3.toWei(1, 'ether'), from: investor2})
       .then(() => {
         token.balanceOf.call(investor2).then(res =>
-          assert.equal(200, web3.fromWei(res.toFixed(), 'ether'),
-            "1 Ether should buy 200 DPT"))
+          assert.equal(606, web3.fromWei(res.toFixed(), 'ether'),
+            "1 Ether should buy 606 SPT"))
         const balance = web3.eth.getBalance(token.address)
         return assert.equal(1, web3.fromWei(balance.toFixed(), 'ether'), "contract balance is 1 ether")
       }))
@@ -153,13 +154,13 @@ contract("PresaleToken", () => {
       .then(assert.fail).catch(evmThrow))
 
   it("tokenManager can call withdrawEther in Phase.Paused", () => {
-    const mgrBalance1 = web3.eth.getBalance(tokenManager).toFixed();
+    const mgrBalance1 = web3.eth.getBalance(escrow).toFixed();
     token.withdrawEther({from: tokenManager})
       .then(() => {
         const tokBalance = web3.fromWei(web3.eth.getBalance(token.address).toFixed(), 'ether');
         assert.equal(0, tokBalance, "contract balance is 0 ether");
-        const mgrBalance2 = web3.eth.getBalance(tokenManager).toFixed();
-        return assert.isAbove(mgrBalance2, mgrBalance1, "token manager got some ether");
+        const mgrBalance2 = web3.eth.getBalance(escrow).toFixed();
+        return assert.isAbove(mgrBalance2, mgrBalance1, "escrow got some ether");
       })
   });
 
@@ -176,8 +177,8 @@ contract("PresaleToken", () => {
     token.buyTokens(investor2, {value: web3.toWei(1, 'ether'), from: investor2})
       .then(() => {
         token.balanceOf.call(investor2).then(res =>
-          assert.equal(400, web3.fromWei(res.toFixed(), 'ether'),
-            "1 Ether should buy 200 DPT"))
+          assert.equal(2*606, web3.fromWei(res.toFixed(), 'ether'),
+            "1 Ether should buy 606 DPT"))
         const balance = web3.eth.getBalance(token.address)
         return assert.equal(1, web3.fromWei(balance.toFixed(), 'ether'), "contract balance is 1 ether")
       }))
