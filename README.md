@@ -6,14 +6,15 @@ These smart contracts are designed to handle initial distribution of SONM
 Presale Tokens (SPT). Please check that you are understande major features
 before investing or interacting with these contracts:
 
-  - tokens are provided at fixed price 200 SPT per 1 ETH;
-  - maximum amount of tokens distributed during presale is limited to 4.000.000 SPT;
+  - tokens are provided at fixed price 606 SPT per 1 ETH;
+  - maximum amount of tokens distributed during presale is limited to 6.060.000 SPT;
   - dev team is able to stop presale at any time;
   - you can not transfer SPT tokens during presale;
   - you will be able to exchange SPT tokens for real SONM tokens at a later
     phase of SONM development;
   - no refund or moneyback is available during presale;
-  - dev team is able to withdraw Ether at any time during or after presale.
+  - dev team is able to withdraw Ether at any time during or after presale
+    - those funds are moved to escrow's address
 
 
 Refer to [Administrator's Guide](docs/admins-guide.md)
