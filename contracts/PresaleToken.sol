@@ -21,11 +21,11 @@ contract PresaleToken {
      *  Constants
     /*/
 
-    string public name = "SONM Presale Token";
-    string public symbol = "SPT";
-    uint   public decimals = 18;
+    string public constant name = "SONM Presale Token";
+    string public constant symbol = "SPT";
+    uint   public constant decimals = 18;
 
-    uint public PRICE = 200; // 200 SPT per Ether
+    uint public constant PRICE = 606; // 606 SPT per Ether
 
     //  price
     // Cup is 10 000 ETH
@@ -33,7 +33,7 @@ contract PresaleToken {
     // ETH price ~50$ for 28.03.2017
     // Cup in $ is ~ 500 000$
 
-    uint public TOKEN_SUPPLY_LIMIT = 6060000 * (1 ether / 1 wei);
+    uint public constant TOKEN_SUPPLY_LIMIT = 606 * 10000 * (1 ether / 1 wei);
 
 
 
