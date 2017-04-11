@@ -43,14 +43,14 @@ module.exports = (deployer, network) => {
   }
   else if (network === "mainnet") {
     team =
-      [ 
-       "0xCc14D25Fae961Ced09709BE04bf13c28Db3FF81b" // Alexey
+      [ "0xCc14D25Fae961Ced09709BE04bf13c28Db3FF81b" // Alexey
       , "0xf9AE3E50B994Fa6914757958D65Ad1B3547fBe82" // Sergey
       ];
   }
-  const requiredConfirmations = network === "mainnet" ? 4 : 2;
+  const requiredConfirmations = 2;
+  const escrow = "0x949341CF3BCA839D21Ee3f15eDCE57280d0133D5";
 
   deployer.deploy(TokenManager, team, requiredConfirmations)
     .then(TokenManager.deployed)
-    .then(tokenMgr => deployer.deploy(PresaleToken, tokenMgr.address));
+    .then(tokenMgr => deployer.deploy(PresaleToken, tokenMgr.address, escrow));
 };

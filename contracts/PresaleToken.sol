@@ -11,9 +11,9 @@ contract PresaleToken {
 
     /// @dev Constructor
     /// @param _tokenManager Token manager address.
-    function PresaleToken(address _tokenManager) {
+    function PresaleToken(address _tokenManager, address _escrow) {
         tokenManager = _tokenManager;
-        escrowManager ='0x949341CF3BCA839D21Ee3f15eDCE57280d0133D5';
+        escrow = _escrow;
     }
 
 
@@ -56,9 +56,8 @@ contract PresaleToken {
     // functions on this contract.
     address public tokenManager;
 
-    //Escrow
-    //escrow from bitcoin talk for presale. (SebastianJU)
-    address public escrowManager;
+    // Gathered funds can be withdrawn only to escrow's address.
+    address public escrow;
 
     // Crowdsale manager has exclusive priveleges to burn presale tokens.
     address public crowdsaleManager;
@@ -160,7 +159,7 @@ contract PresaleToken {
     {
         // Available at any phase.
         if(this.balance > 0) {
-            if(!escrowManager.send(this.balance)) throw;
+            if(!escrow.send(this.balance)) throw;
         }
     }
 
