@@ -64,7 +64,7 @@ const API = {
             : Promise.reject({INVALID_TOKEN_NAME: true, arg: name}))
         .then(name => Promise.all(
           [ Promise.resolve(name)
-          , Promise.resolve(200)
+          , token.PRICE.call()
           , API.getBalance(token.address)
           , token.symbol.call()
           , token.totalSupply.call()
